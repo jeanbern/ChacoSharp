@@ -2,6 +2,7 @@
 #pragma warning disable HAA0101 // Array allocation for params parameter
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.Timer;
@@ -41,7 +42,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering klvspiff, nvtxs = {0:d}>", nvtxs);
+                Trace.WriteLine($"<Entering klvspiff, {nameof(nvtxs)} = {nvtxs:d}>");
             }
 
             /* Find largest possible change. */
@@ -76,7 +77,7 @@ namespace ChacoSharp.Coarsening
             {
                 if (DEBUG_KL != DebugFlagKL.NoDebugging)
                 {
-                    Console.WriteLine(" Before KLV: ");
+                    Trace.WriteLine(" Before KLV: ");
                     countup_vtx_sep(graph, nvtxs, sets);
                 }
 
@@ -87,15 +88,15 @@ namespace ChacoSharp.Coarsening
 
                 if (DEBUG_KL == DebugFlagKL.MoreInfo || DEBUG_KL == DebugFlagKL.PrintBucket)
                 {
-                    Console.WriteLine(" After KLV: ");
+                    Trace.WriteLine(" After KLV: ");
                     countup_vtx_sep(graph, nvtxs, sets);
                 }
             }
 
             if (error)
             {
-                Console.WriteLine("\nWARNING: No space to perform KLV on graph with {0:d} vertices.", nvtxs);
-                Console.WriteLine("         NO LOCAL REFINEMENT PERFORMED.\n");
+                Trace.WriteLine($"\nWARNING: No space to perform KLV on graph with {nvtxs:d} vertices.");
+                Trace.WriteLine("         NO LOCAL REFINEMENT PERFORMED.\n");
             }
 
             free_klv(lbuckets, rbuckets, llistspace, rlistspace, ldvals, rdvals);
@@ -132,7 +133,7 @@ namespace ChacoSharp.Coarsening
                 }
             }
 
-            Console.WriteLine("Set sizes = {0:d}/{1:d}, Separator size = {2:d}\n", j, k, sep_size);
+            Trace.WriteLine($"Set sizes = {j:d}/{k:d}, Separator size = {sep_size:d}\n");
 
             /* Now check that it really is a separator. */
             for (i = 1; i <= nvtxs; i++)
@@ -145,7 +146,7 @@ namespace ChacoSharp.Coarsening
                         vtx = graph[i]->edges[j];
                         if (sets[vtx] != 2 && sets[vtx] != set)
                         {
-                            Console.WriteLine("Error: {0:d} (set {1:d}) adjacent to {2:d} (set {3:d})", i, set, vtx, sets[vtx]);
+                            Trace.WriteLine($"Error: {i:d} (set {set:d}) adjacent to {vtx:d} (set {sets[vtx]:d})");
                         }
                     }
                 }

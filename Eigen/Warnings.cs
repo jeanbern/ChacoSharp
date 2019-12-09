@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.CheckEig;
 
@@ -14,11 +15,11 @@ namespace ChacoSharp.Eigen
             {
                 if (Math.Abs(number) < 100)
                 {
-                    Console.Write("  {0:f}", number);
+                    Trace.Write($"  {number:f}");
                 }
                 else
                 {
-                    Console.Write("  {0:g}", number);
+                    Trace.Write($"  {number:g}");
                 }
             }
         }
@@ -56,7 +57,7 @@ namespace ChacoSharp.Eigen
                 {
                     if (LANCZOS_CONVERGENCE_MODE == 1)
                     {
-                        Console.WriteLine("Note about warnings: in partition convergence monitoring mode.");
+                        Trace.WriteLine("Note about warnings: in partition convergence monitoring mode.");
                     }
 
                     for (i = 1; i <= d; i++)
@@ -69,20 +70,20 @@ namespace ChacoSharp.Eigen
                 {
                     if (pass == 1)
                     {
-                        Console.WriteLine("Lanczos itns. = {0:d}", j);
+                        Trace.WriteLine($"Lanczos itns. = {j:d}");
                     }
 
-                    Console.WriteLine("          lambda                Ares est.              Ares          index");
+                    Trace.WriteLine("          lambda                Ares est.              Ares          index");
                     for (i = 1; i <= d; i++)
                     {
-                        Console.Write("{0:d}.", i);
+                        Trace.Write($"{i:d}.");
                         doubleout(lambda[i], 1);
                         doubleout(bound[i], 1);
                         doubleout(Ares[i], 1);
-                        Console.WriteLine("   {0:d}", index[i]);
+                        Trace.WriteLine($"   {index[i]:d}");
                     }
 
-                    Console.WriteLine();
+                    Trace.WriteLine("");
                 }
 
                 if (WARNING_EVECS > 0)
@@ -110,24 +111,22 @@ namespace ChacoSharp.Eigen
 
                     if (j == maxj)
                     {
-                        Console.WriteLine("WARNING: Maximum number of Lanczos iterations reached.");
+                        Trace.WriteLine("WARNING: Maximum number of Lanczos iterations reached.");
                     }
 
                     if (warning2 && !warning3)
                     {
-                        Console.WriteLine("WARNING: Minor loss of orthogonality (Ares/est. > {0:g}).",
-                            WARNING_ORTHTOL);
+                        Trace.WriteLine($"WARNING: Minor loss of orthogonality (Ares/est. > {WARNING_ORTHTOL:g}).");
                     }
 
                     if (warning3)
                     {
-                        Console.WriteLine("WARNING: Substantial loss of orthogonality (Ares/est. > {0:g}).",
-                            WARNING_MISTOL);
+                        Trace.WriteLine($"WARNING: Substantial loss of orthogonality (Ares/est. > {WARNING_MISTOL:g}).");
                     }
 
                     if (warning1)
                     {
-                        Console.WriteLine("WARNING: Eigen pair tolerance ({0:g}) not achieved.", eigtol);
+                        Trace.WriteLine($"WARNING: Eigen pair tolerance ({eigtol:g}) not achieved.");
                     }
                 }
 
@@ -137,14 +136,14 @@ namespace ChacoSharp.Eigen
                     {
                         if (DEBUG_EVECS <= 0)
                         {
-                            Console.WriteLine("          lambda                Ares est.              Ares          index");
+                            Trace.WriteLine("          lambda                Ares est.              Ares          index");
                             for (i = 1; i <= d; i++)
                             {
-                                Console.Write("{0:d}.", i);
+                                Trace.Write($"{i:d}.");
                                 doubleout(lambda[i], 1);
                                 doubleout(bound[i], 1);
                                 doubleout(Ares[i], 1);
-                                Console.WriteLine("   {0:d}", index[i]);
+                                Trace.WriteLine($"   {index[i]:d}");
                             }
                         }
 
@@ -156,7 +155,7 @@ namespace ChacoSharp.Eigen
                 {
                     if (Sres_max > SRESTOL)
                     {
-                        Console.WriteLine("WARNING: Maximum eigen residual of T ({0:g}) exceeds SRESTOL.", Sres_max);
+                        Trace.WriteLine($"WARNING: Maximum eigen residual of T ({Sres_max:g}) exceeds SRESTOL.");
                     }
                 }
 
@@ -164,7 +163,7 @@ namespace ChacoSharp.Eigen
                 {
                     if (SRES_SWITCHES > 0)
                     {
-                        Console.WriteLine("WARNING: Switched routine for computing evec of T {0:d} times.", SRES_SWITCHES);
+                        Trace.WriteLine($"WARNING: Switched routine for computing evec of T {SRES_SWITCHES:d} times.");
                         SRES_SWITCHES = 0;
                     }
                 }
@@ -180,8 +179,8 @@ namespace ChacoSharp.Eigen
 
                 if (hosed)
                 {
-                    Console.WriteLine("ERROR: Sorry, out-of-bounds eigenvalue indicates serious breakdown.");
-                    Console.WriteLine("       Try different parameters or another eigensolver.");
+                    Trace.WriteLine("ERROR: Sorry, out-of-bounds eigenvalue indicates serious breakdown.");
+                    Trace.WriteLine("       Try different parameters or another eigensolver.");
                     if (pass == 2)
                     {
                         throw new InvalidOperationException();

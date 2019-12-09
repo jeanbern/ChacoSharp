@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Graph.CountWeights;
@@ -75,7 +76,7 @@ public static void coarsen_klv(
   int               i, j;                   /* loop counters */
 
   if (DEBUG_COARSEN || DEBUG_TRACE) {
-      Console.WriteLine("<Entering coarsen_kl, step={0:d}, nvtxs={1:d}, nedges={2:d}, vmax={3:d}>\n", step, nvtxs, nedges, vmax);
+      Trace.WriteLine($"<Entering coarsen_kl, {nameof(step)}={step:d}, {nameof(nvtxs)}={nvtxs:d}, {nameof(nedges)}={nedges:d}, {nameof(vmax)}={vmax:d}>\n");
   }
 
   /* Is problem small enough to solve? */
@@ -155,8 +156,8 @@ public static void coarsen_klv(
   /* If coarsening isn't working very well, give up and partition. */
   give_up = false;
   if (nvtxs * COARSEN_RATIO_MIN < cnvtxs && cnvtxs > vmax && !flattened) {
-    Console.WriteLine("WARNING: Coarsening not making enough progress, nvtxs = {0:d}, cnvtxs = {1:d}.", nvtxs, cnvtxs);
-    Console.WriteLine("         Recursive coarsening being stopped prematurely.");
+      Trace.WriteLine($"WARNING: Coarsening not making enough progress, {nameof(nvtxs)} = {nvtxs:d}, {nameof(cnvtxs)} = {cnvtxs:d}.");
+    Trace.WriteLine("         Recursive coarsening being stopped prematurely.");
     give_up = true;
   }
 
@@ -327,8 +328,9 @@ public static void coarsen_klv(
     Marshal.FreeHGlobal((IntPtr)ccoords);
   }
 
-  if (DEBUG_COARSEN) {
-      Console.WriteLine(" Leaving coarsen_klv, step={0:d}", step);
+  if (DEBUG_COARSEN)
+  {
+      Trace.WriteLine($" Leaving coarsen_klv, {nameof(step)}={step:d}");
   }
 }
 
@@ -343,7 +345,7 @@ public static void print_sep_size(int *list, vtx_data **graph /* array of vtx da
     sep_size++;
     sep_weight += graph[list[i]]->vwgt;
   }
-  Console.WriteLine(" Sep_size = {0:d}, Sep_weight = {1:d}", sep_size, sep_weight);
+  Trace.WriteLine($" {nameof(sep_size)} = {sep_size:d}, {nameof(sep_weight)} = {sep_weight:d}");
 }
     }
 }

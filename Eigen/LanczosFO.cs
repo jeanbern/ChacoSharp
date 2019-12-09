@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.Orthogonalization;
@@ -147,18 +148,18 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering lanczos_FO>");
+                Trace.WriteLine("<Entering lanczos_FO>");
             }
 
             if (DEBUG_EVECS > 0)
             {
                 if (version == 1)
                 {
-                    Console.WriteLine("Full orthogonalization Lanczos, matrix size = {0:d}", n);
+                    Trace.WriteLine($"Full orthogonalization Lanczos, matrix size = {n:d}");
                 }
                 else
                 {
-                    Console.WriteLine("Full orthogonalization Lanczos, inverted operator, matrix size = {0:d}", n);
+                    Trace.WriteLine($"Full orthogonalization Lanczos, inverted operator, matrix size = {n:d}");
                 }
             }
 
@@ -272,7 +273,7 @@ namespace ChacoSharp.Eigen
                     memory_ok = false;
                     if (DEBUG_EVECS > 0 || WARNING_EVECS > 0)
                     {
-                        Console.WriteLine("WARNING: Lanczos out of memory; computing best approximation available.");
+                        Trace.WriteLine("WARNING: Lanczos out of memory; computing best approximation available.");
                     }
 
                     if (j <= 2)
@@ -300,10 +301,10 @@ namespace ChacoSharp.Eigen
                     symmlqitns += itn;
                     if (DEBUG_EVECS > 2)
                     {
-                        Console.WriteLine("Symmlq report:      rtol {0:g}", rtol);
-                        Console.WriteLine("  system norm {0:g}, solution norm {1:g}", anorm, ynorm);
-                        Console.WriteLine("  system condition {0:g}, residual {1:g}", acond, rnorm);
-                        Console.WriteLine("  termination condition {0:d}, iterations {1:d}", istop, itn);
+                        Trace.WriteLine($"Symmlq report:      rtol {rtol:g}");
+                        Trace.WriteLine($"  system norm {anorm:g}, solution norm {ynorm:g}");
+                        Trace.WriteLine($"  system condition {acond:g}, residual {rnorm:g}");
+                        Trace.WriteLine($"  termination condition {istop:d}, iterations {itn:d}");
                     }
                 }
 
@@ -419,7 +420,7 @@ namespace ChacoSharp.Eigen
             time = lanc_seconds();
             if (DEBUG_EVECS > 0 && version == 2)
             {
-                Console.WriteLine("\nTotal Symmlq iterations {0:d}", symmlqitns);
+                Trace.WriteLine($"\nTotal Symmlq iterations {symmlqitns:d}");
             }
 
             if (version == 2)

@@ -1,5 +1,4 @@
-﻿using System;
-using static ChacoSharp.StaticConstants;
+﻿using System.Diagnostics;
 
 namespace ChacoSharp.Utilities
 {
@@ -12,10 +11,7 @@ namespace ChacoSharp.Utilities
             int* loc2glob /* subgraph -> graph numbering map */
         )
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(make_maps2)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(make_maps2)}>");
 
             int i, j; /* loop counter */
 
@@ -41,7 +37,7 @@ namespace ChacoSharp.Utilities
                 }
             }
 
-            return (j);
+            return j;
         }
 
         public static void make_maps2(int* assignment, /* set assignments for graph */
@@ -51,10 +47,7 @@ namespace ChacoSharp.Utilities
             int* loc2glob /* subgraph -> graph numbering map */
         )
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(make_maps2)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(make_maps2)}>");
 
             int i, j; /* loop counter */
 

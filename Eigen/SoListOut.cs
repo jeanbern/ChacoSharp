@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 
 namespace ChacoSharp.Eigen
@@ -17,11 +17,11 @@ namespace ChacoSharp.Eigen
             {
                 if ((solist[i])->index <= (j / 2))
                 {
-                    Console.Write(".");
+                    Trace.Write(".");
                 }
                 else
                 {
-                    Console.Write("+");
+                    Trace.Write("+");
                 }
 
                 /* Really detailed output: printf("\n"); printf("depth
@@ -32,17 +32,17 @@ namespace ChacoSharp.Eigen
                    vecout((solist[i])->vec,1,n,"vec", null); */
             }
 
-            Console.WriteLine("{0:d}", ngood);
+            Trace.WriteLine($"{ngood:d}");
 
             if (DEBUG_EVECS > 2)
             {
-                Console.Write("  actual indices: ");
+                Trace.Write("  actual indices: ");
                 for (i = 1; i <= ngood; i++)
                 {
-                    Console.Write(" {0:d}", solist[i]->index);
+                    Trace.Write($" {solist[i]->index:d}");
                 }
 
-                Console.WriteLine();
+                Trace.WriteLine("");
             }
         }
 
@@ -58,15 +58,15 @@ namespace ChacoSharp.Eigen
             {
                 if ((solist[i])->index <= (j / 2))
                 {
-                    Console.Write(".");
+                    Trace.Write(".");
                 }
                 else
                 {
-                    Console.Write("+");
+                    Trace.Write("+");
                 }
             }
 
-            Console.WriteLine("{0:d}", ngood);
+            Trace.WriteLine($"{ngood:d}");
         }
     }
 }

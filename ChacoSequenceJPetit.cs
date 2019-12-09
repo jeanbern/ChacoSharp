@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.EigenSolve;
@@ -41,10 +42,7 @@ namespace ChacoSharp
             double eigtol /* tolerance on eigenvectors */
         )
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(sequence)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(sequence)}>");
 /* JPS
             extern char SEQ_FILENAME[];
 */
@@ -69,7 +67,7 @@ namespace ChacoSharp
             var connectedComponentCount = find_edges(graph, nvtxs, vertexComponentMap, space, &edgeslist);
             ++connectedComponentCount;
 
-            Console.WriteLine("Found connected components: " + connectedComponentCount);
+            Trace.WriteLine("Found connected components: " + connectedComponentCount);
 
             free_edgeslist(edgeslist);
             yvecs[1] = (double*) Marshal.AllocHGlobal((nvtxs + 1) * sizeof(double));
@@ -148,7 +146,7 @@ namespace ChacoSharp
                 }
 
                 var maxWeightedVertexDegree = find_maxdeg(subgraph, subgraphVertexCount, useEdgeWeights, (float*) null);
-                Console.WriteLine("maxWeightedVertexDegree: " + maxWeightedVertexDegree);
+                Trace.WriteLine($"{nameof(maxWeightedVertexDegree)}: {maxWeightedVertexDegree}");
 
                 double totalVertexWeight; /* sum of all vertex weights */
                 int componentVertexWeightMax; /* largest vertex weight in component */
@@ -170,8 +168,8 @@ namespace ChacoSharp
 
                 goal[0] = goal[1] = totalVertexWeight / 2;
 
-                Console.WriteLine("useVertexWeights: " + useVertexWeights);
-                Console.WriteLine("useEdgeWeights: " + useEdgeWeights);
+                Trace.WriteLine($"{nameof(useVertexWeights)}: {useVertexWeights}");
+                Trace.WriteLine($"{nameof(useEdgeWeights)}: {useEdgeWeights}");
 
                 if (subgraphVertexCount == 1)
                 {
@@ -242,7 +240,7 @@ namespace ChacoSharp
             Marshal.FreeHGlobal((IntPtr) space);
             Marshal.FreeHGlobal((IntPtr) vertexComponentMap);
 
-            Console.WriteLine("{0:d} connected components found.", connectedComponentCount);
+            Trace.WriteLine($"{connectedComponentCount:D} connected components found.");
         }
     }
 }

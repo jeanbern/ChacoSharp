@@ -1,6 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static ChacoSharp.StaticConstants;
 
 namespace ChacoSharp.Graph
 {
@@ -17,10 +16,7 @@ namespace ChacoSharp.Graph
             vtx_data*** pgraph /* ptr to array of vtx data for graph */
         )
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(reformat)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(reformat)}>");
 
             vtx_data** graph = null; /* array of vtx data for graph */
             vtx_data* links = null; /* space for data for all vtxs */
@@ -131,7 +127,7 @@ namespace ChacoSharp.Graph
                         /* Self edge, skip it. */
                         //if (self_edge == 0)
                         {
-                            Console.WriteLine("WARNING: Self edge ({0:d},{1:d}) being ignored", i, i);
+                            Trace.WriteLine($"WARNING: Self edge ({i:d},{i:d}) being ignored");
                         }
 
                         ++self_edge;
@@ -169,7 +165,7 @@ namespace ChacoSharp.Graph
 
             if (self_edge > 1)
             {
-                Console.WriteLine("WARNING: {0:d} self edges were detected and ignored", self_edge);
+                Trace.WriteLine($"WARNING: {self_edge:d} self edges were detected and ignored");
             }
 
             return false;

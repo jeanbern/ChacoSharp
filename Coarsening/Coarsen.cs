@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Coarsening.Coarsen1;
@@ -83,7 +84,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COARSEN)
             {
-                Console.WriteLine("<Entering coarsen, step={0:D}, nvtxs={1:D}, nedges={2:D}, vmax={3:D}>\n", step, nvtxs, nedges, vmax);
+                Trace.WriteLine($"<Entering coarsen, {nameof(step)}={step:D}, {nameof(nvtxs)}={nvtxs:D}, {nameof(nedges)}={nedges:D}, {nameof(vmax)}={vmax:D}>\n");
             }
 
             nsets = 1 << ndims;
@@ -204,8 +205,8 @@ namespace ChacoSharp.Coarsening
             give_up = false;
             if (nvtxs * COARSEN_RATIO_MIN < cnvtxs && cnvtxs > vmax)
             {
-                Console.WriteLine("WARNING: Coarsening not making enough progress, nvtxs = {0:d}, cnvtxs = {1:d}.", nvtxs, cnvtxs);
-                Console.WriteLine("         Recursive coarsening being stopped prematurely.");
+                Trace.WriteLine($"WARNING: Coarsening not making enough progress, {nameof(nvtxs)} = {nvtxs:d}, {nameof(cnvtxs)} = {cnvtxs:d}.");
+                Trace.WriteLine("         Recursive coarsening being stopped prematurely.");
                 give_up = true;
             }
 
@@ -453,7 +454,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COARSEN)
             {
-                Console.WriteLine(" Leaving coarsen, step={0:d}", step);
+                Trace.WriteLine($" Leaving coarsen, {nameof(step)}={step:d}");
             }
 
             Marshal.FreeHGlobal((IntPtr)twptr_save);

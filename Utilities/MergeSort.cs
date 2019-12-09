@@ -1,5 +1,5 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 
 namespace ChacoSharp.Utilities
@@ -41,7 +41,7 @@ namespace ChacoSharp.Utilities
                 return;
             }
 
-            Console.WriteLine("List improperly sorted in mergesort");
+            Trace.WriteLine("List improperly sorted in mergesort");
             if (DEBUG_BPMATCH == DebugFlagBP.Logging)
             {
                 return;
@@ -49,7 +49,7 @@ namespace ChacoSharp.Utilities
 
             for (var i = 1; i < nvals; i++)
             {
-                Console.WriteLine("{0:d}  {1:f}", indices[i], vals[indices[i]]);
+                Trace.WriteLine($"{indices[i]:d}  {vals[indices[i]]:f}");
             }
         }
 

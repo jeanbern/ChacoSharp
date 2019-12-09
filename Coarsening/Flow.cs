@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 // ReSharper disable PossibleNullReferenceException
@@ -77,7 +78,7 @@ namespace ChacoSharp.Coarsening
                     }
                 }
 
-                Console.WriteLine("    Corresponds to unweighted, nleft = {0:d}, nright = {1:d}, 2*nedges = {2:d}", wleft, wright, wedges);
+                Trace.WriteLine($"    Corresponds to unweighted, {nameof(wleft)} = {wleft:d}, {nameof(wright)} = {wright:d}, 2*nedges = {wedges:d}");
             }
 
             /* number of edges in bipartite graph */
@@ -401,7 +402,7 @@ namespace ChacoSharp.Coarsening
                         var neighbor = indices[j];
                         if (!marked[neighbor])
                         {
-                            Console.WriteLine("Edge ({0:d}, {1:d}) not covered", i, neighbor);
+                            Trace.WriteLine($"Edge ({i:d}, {neighbor:d}) not covered");
                         }
                     }
                 }
@@ -411,11 +412,11 @@ namespace ChacoSharp.Coarsening
             // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (countFlow != sepWeight)
             {
-                Console.WriteLine("ERROR: total_flow = {0:d}, sep_weight = {1:d}, sep_size = {2:d}", countFlow, sepWeight, sepSize);
+                Trace.WriteLine($"ERROR: total_flow = {countFlow:d}, sep_weight = {sepWeight:d}, sep_size = {sepSize:d}");
             }
             else
             {
-                Console.WriteLine("total_flow = {0:d}, sep_weight = {1:d}, sep_size = {2:d}", countFlow, sepWeight, sepSize);
+                Trace.WriteLine($"total_flow = {countFlow:d}, sep_weight = {sepWeight:d}, sep_size = {sepSize:d}");
             }
 
             /* Now check if any separator nodes have remaining flow. */
@@ -441,7 +442,7 @@ namespace ChacoSharp.Coarsening
             {
                 if (resid[i] < 0 || resid[i] > vweight[i])
                 {
-                    Console.WriteLine("BAD resid[{0:d}] = {1:d}, vweight = {2:d}", i, resid[i], vweight[i]);
+                    Trace.WriteLine($"BAD resid[{i:d}] = {resid[i]:d}, vweight = {vweight[i]:d}");
                 }
             }
 
@@ -452,7 +453,7 @@ namespace ChacoSharp.Coarsening
                 leftUsed += vweight[i] - resid[i];
                 if (marked[i] && resid[i] != 0)
                 {
-                    Console.WriteLine("Vertex {0:d} in separator, but resid = {1:d} (vweight = {2:d})", i, resid[i], vweight[i]);
+                    Trace.WriteLine($"Vertex {i:d} in separator, but resid = {resid[i]:d} (vweight = {vweight[i]:d})");
                 }
             }
 
@@ -461,13 +462,13 @@ namespace ChacoSharp.Coarsening
                 rightUsed += vweight[i] - resid[i];
                 if (marked[i] && resid[i] != 0)
                 {
-                    Console.WriteLine("Vertex {0:d} in separator, but resid = {1:d} (vweight = {2:d})", i, resid[i], vweight[i]);
+                    Trace.WriteLine($"Vertex {i:d} in separator, but resid = {resid[i]:d} (vweight = {vweight[i]:d})");
                 }
             }
 
             if (leftUsed != rightUsed)
             {
-                Console.WriteLine("left_used = {0:d}, NOT EQUAL TO right_used = {1:d}", leftUsed, rightUsed);
+                Trace.WriteLine($"left_used = {leftUsed:d}, NOT EQUAL TO right_used = {rightUsed:d}");
             }
         }
 
@@ -478,7 +479,7 @@ namespace ChacoSharp.Coarsening
             {
                 if (resid[i] < 0 || resid[i] > vweight[i])
                 {
-                    Console.WriteLine("BAD resid[{0:d}] = {1:d}, vweight = {2:d}", i, resid[i], vweight[i]);
+                    Trace.WriteLine($"BAD resid[{i:d}] = {resid[i]:d}, vweight = {vweight[i]:d}");
                 }
             }
 
@@ -495,7 +496,7 @@ namespace ChacoSharp.Coarsening
 
             if (leftUsed != rightUsed)
             {
-                Console.WriteLine("left_used = {0:d}, NOT EQUAL TO right_resid = {1:d}", leftUsed, rightUsed);
+                Trace.WriteLine($"left_used = {leftUsed:d}, NOT EQUAL TO right_resid = {rightUsed:d}");
             }
 
             var diff = new int[leftVertexCount + rightVertexCount];
@@ -511,7 +512,7 @@ namespace ChacoSharp.Coarsening
                 {
                     if (flow[j] < 0)
                     {
-                        Console.WriteLine("Negative flow ({0:d},{1:d}) = {2:d}", i, indices[j], flow[j]);
+                        Trace.WriteLine($"Negative flow ({i:d},{indices[j]:d}) = {flow[j]:d}");
                     }
 
                     diff[i] += flow[j];
@@ -523,7 +524,7 @@ namespace ChacoSharp.Coarsening
             {
                 if (diff[i] != vweight[i] - resid[i])
                 {
-                    Console.WriteLine("ERROR: diff[{0:d}] = {1:d}, but vweight = {2:d} and resid = {3:d}", i, diff[i], vweight[i], resid[i]);
+                    Trace.WriteLine($"ERROR: diff[{i:d}] = {diff[i]:d}, but vweight = {vweight[i]:d} and resid = {resid[i]:d}");
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0101 // Array allocation for params parameter
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 
 namespace ChacoSharp.BipartiteMatching
@@ -77,7 +78,7 @@ namespace ChacoSharp.BipartiteMatching
 
                 if (Math.Abs(setval - bestval) >= tolerance * (Math.Abs(setval) + Math.Abs(bestval)))
                 {
-                    Console.WriteLine(" Vtx {0:d} in set {1:d} ({2:e}), but should be in {3:d} ({4:e})", i, sets[i], setval, bestset, bestval);
+                    Trace.WriteLine($" Vtx {i:d} in set {sets[i]:d} ({setval:e}), but should be in {bestset:d} ({bestval:e})");
                     error = true;
                 }
 
@@ -91,7 +92,7 @@ namespace ChacoSharp.BipartiteMatching
                 Console.Write(" {0:d}({1:d})", sizes[i], weights[i]);
             }
 
-            Console.WriteLine();
+            Trace.WriteLine("");
 
             if (error)
             {

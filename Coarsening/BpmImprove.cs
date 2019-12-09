@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0101 // Array allocation for params parameter
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Coarsening.MatchingHelper;
@@ -42,8 +43,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COVER > 1)
             {
-                Console.WriteLine("Before first matching, sep_size = {0:d}, sep_weight = {1:d},  Sizes = {2:g}/{3:g}", separatorSize,
-                    separatorWeight, weights[0], weights[1]);
+                Trace.WriteLine($"Before first matching, {nameof(separatorSize)} = {separatorSize:d}, {nameof(separatorWeight)} = {separatorWeight:d},  Sizes = {weights[0]:g}/{weights[1]:g}");
             }
 
             var ratio = (weights[0] + weights[1]) / (goal[0] + goal[1]);
@@ -74,8 +74,7 @@ namespace ChacoSharp.Coarsening
 
                 if (DEBUG_COVER != 0)
                 {
-                    Console.WriteLine("After big matching, sep_size = {0:d}, sep_weight = {1:d},  Sizes = {2:g}/{3:g}", separatorSize,
-                        separatorWeight, weights[0], weights[1]);
+                    Trace.WriteLine($"After big matching, {nameof(separatorSize)} = {separatorSize:d}, {nameof(separatorWeight)} = {separatorWeight:d},  Sizes = {weights[0]:g}/{weights[1]:g}");
                 }
 
                 if (VERTEX_COVER)
@@ -93,7 +92,7 @@ namespace ChacoSharp.Coarsening
 
                         if (DEBUG_COVER != 0)
                         {
-                            Console.WriteLine("After small matching, sep_size = {0:d},  Sizes = {1:g}/{2:g}", separatorSize, weights[0], weights[1]);
+                            Trace.WriteLine($"After small matching, {nameof(separatorSize)} = {separatorSize:d},  Sizes = {weights[0]:g}/{weights[1]:g}");
                         }
                     }
                 }
@@ -103,7 +102,7 @@ namespace ChacoSharp.Coarsening
             {
 #pragma warning disable HAA0101 // Array allocation for params parameter
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                Console.WriteLine("After all matchings, sep_size = {0:d}, sep_weight = {1:d},  Sizes = {2:g}/{3:g}\n", separatorSize, separatorWeight, weights[0], weights[1]);
+                Trace.WriteLine($"After all matchings, {nameof(separatorSize)} = {separatorSize:d}, {nameof(separatorWeight)} = {separatorWeight:d},  Sizes = {weights[0]:g}/{weights[1]:g}\n");
             }
         }
 
@@ -219,7 +218,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COVER > 1)
             {
-                Console.WriteLine("Sides {0:f}, {1:f}: sep {2:d} total {3:f} {4:f}", new_weights[0], new_weights[1], *sep_size, new_weights[0] + new_weights[1], new_weights[0] + new_weights[1] + *sep_size);
+                Trace.WriteLine($"Sides {new_weights[0]:f}, {new_weights[1]:f}: sep {*sep_size:d} total {new_weights[0] + new_weights[1]:f} {new_weights[0] + new_weights[1] + *sep_size:f}");
             }
 
             /* if (new_cost < *pcost) { */

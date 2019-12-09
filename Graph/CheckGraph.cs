@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
 using System;
+using System.Diagnostics;
 
 namespace ChacoSharp.Graph
 {
@@ -28,7 +29,7 @@ namespace ChacoSharp.Graph
 
                 if (graph[i]->edges[0] != i)
                 {
-                    Console.WriteLine(" Self edge wrong for vtx {0:d}", i);
+                    Trace.WriteLine($" Self edge wrong for vtx {i:d}");
                     flag = true;
                 }
 
@@ -36,7 +37,7 @@ namespace ChacoSharp.Graph
                 {
                     if (isolatedVertexCount == 0)
                     {
-                        Console.WriteLine("WARNING: Vertex {0:d} has no neighbors", i);
+                        Trace.WriteLine($"WARNING: Vertex {i:d} has no neighbors");
                     }
 
                     ++isolatedVertexCount;
@@ -46,7 +47,7 @@ namespace ChacoSharp.Graph
                 {
                     if (badWeightVertexCount == 0)
                     {
-                        Console.WriteLine("Vertex {0:d} has bad vertex weight {1:d}.", i, graph[i]->vwgt);
+                        Trace.WriteLine($"Vertex {i:d} has bad vertex weight {graph[i]->vwgt:d}.");
                     }
 
                     ++badWeightVertexCount;
@@ -69,33 +70,33 @@ namespace ChacoSharp.Graph
                     /* Move it to the end and delete instead? */
                     if (neighbor == i)
                     {
-                        Console.WriteLine("Self edge ({0:d},{1:d}) not allowed", i, neighbor);
+                        Trace.WriteLine($"Self edge ({i:d},{neighbor:d}) not allowed");
                         flag = true;
                     }
 
                     if (neighbor < 1 || neighbor > nvtxs)
                     {
-                        Console.WriteLine("Edge ({0:d},{1:d}) included, but nvtxs = {2:d}", i, neighbor, nvtxs);
+                        Trace.WriteLine($"Edge ({i:d},{neighbor:d}) included, but nvtxs = {nvtxs:d}");
                         flag = true;
                     }
 
                     /* Move it to the end and delete instead? */
                     if (useEdgeWeights && graph[i]->ewgts[j] <= 0)
                     {
-                        Console.WriteLine("Bad edge weight {0:g} for edge ({1:d}, {2:d})", graph[i]->ewgts[j], i, neighbor);
+                        Trace.WriteLine($"Bad edge weight {graph[i]->ewgts[j]:g} for edge ({i:d}, {neighbor:d})");
                         flag = true;
                     }
 
                     float eweight; /* edge weight */
                     if (!is_an_edge(graph[neighbor], i, &eweight))
                     {
-                        Console.WriteLine("Edge ({0:d},{1:d}) included but not ({2:d},{3:d})", i, neighbor, neighbor, i);
+                        Trace.WriteLine($"Edge ({i:d},{neighbor:d}) included but not ({neighbor:d},{i:d})");
                         flag = true;
                     }
                     // ReSharper disable once CompareOfFloatsByEqualityOperator
                     else if (useEdgeWeights && eweight != graph[i]->ewgts[j])
                     {
-                        Console.WriteLine("Weight of ({0:d},{1:d})={2:g}, but weight of ({3:d},{4:d})={5:g}", i, neighbor, graph[i]->ewgts[j], neighbor, i, eweight);
+                        Trace.WriteLine($"Weight of ({i:d},{neighbor:d})={graph[i]->ewgts[j]:g}, but weight of ({neighbor:d},{i:d})={eweight:g}");
                         flag = true;
                     }
                 }
@@ -103,25 +104,25 @@ namespace ChacoSharp.Graph
                 // ReSharper disable once InvertIf
                 if (useEdgeWeights && Math.Abs(edgeWeightTotal) > 1.0e-7 * Math.Abs(graph[i]->ewgts[0]))
                 {
-                    Console.WriteLine("Sum of edge weights for vertex {0:d} = {1:g}", i, edgeWeightTotal);
+                    Trace.WriteLine($"Sum of edge weights for vertex {i:d} = {edgeWeightTotal:g}");
                     flag = true;
                 }
             }
 
             if (isolatedVertexCount > 1)
             {
-                Console.WriteLine("WARNING: {0:d} vertices have no neighbors", isolatedVertexCount);
+                Trace.WriteLine($"WARNING: {isolatedVertexCount:d} vertices have no neighbors");
             }
 
             if (badWeightVertexCount > 1)
             {
-                Console.WriteLine("{0:d} vertices have bad vertex weights", badWeightVertexCount);
+                Trace.WriteLine($"{badWeightVertexCount:d} vertices have bad vertex weights");
             }
 
             // ReSharper disable once InvertIf
             if (neighborCount != 2 * nedges)
             {
-                Console.WriteLine(" twice nedges = {0:d}, but I count {1:d}", 2 * nedges, neighborCount);
+                Trace.WriteLine($" twice nedges = {2 * nedges:d}, but I count {neighborCount:d}");
                 flag = true;
             }
 

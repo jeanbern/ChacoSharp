@@ -1,5 +1,4 @@
-﻿using System;
-using static ChacoSharp.Eigen.TevecHelper;
+﻿using static ChacoSharp.Eigen.TevecHelper;
 using static ChacoSharp.Utilities.SetVec;
 using static ChacoSharp.Utilities.Scadd;
 

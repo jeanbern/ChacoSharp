@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ChacoSharp.Connect
 {
@@ -95,7 +96,7 @@ public static double heap_extract_max(heap *heap,  /* array of vals/tag in a hea
   double maxval; /* return value */
 
   if (nvals < 1) {
-    Console.WriteLine("Heap underflow");
+    Trace.WriteLine("Heap underflow");
     throw new InvalidOperationException("Heap underflow");
   }
 

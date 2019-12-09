@@ -1,8 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using static ChacoSharp.Utilities.Randomize;
-using static ChacoSharp.Utilities.Timer;
-using static ChacoSharp.StaticConstants;
 using System;
+using System.Diagnostics;
 
 namespace ChacoSharp.Connect
 {
@@ -18,10 +17,7 @@ namespace ChacoSharp.Connect
         /// <returns>The number of connected components.</returns>
         public static int find_comps(vtx_data** graph, int nvtxs, int* mark, int* vtxlist)
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(find_comps)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(find_comps)}>");
 
             for (var i = 1; i <= nvtxs; i++)
             {
@@ -52,13 +48,11 @@ namespace ChacoSharp.Connect
                 // Add new edge to list needed for connectivity.
                 componentCount++;
                 bfsearch(graph, root, &visitedVertexCount, mark, vtxlist, componentCount);
-                Console.WriteLine($"Visited {visitedVertexCount} out of {nvtxs} vertices");
+                Trace.WriteLine($"Visited {visitedVertexCount} out of {nvtxs} vertices");
             }
 
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Exiting {nameof(find_comps)}>");
-            }
+            Trace.WriteLine($"<Exiting {nameof(find_comps)}>");
+
             return componentCount + 1;
         }
 
@@ -74,10 +68,7 @@ namespace ChacoSharp.Connect
         /// <returns></returns>
         public static int find_edges(vtx_data** graph, int nvtxs, int* mark, int* vtxlist, edgeslist** edges)
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(find_edges)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(find_edges)}>");
             for (var i = 1; i <= nvtxs; i++)
             {
                 mark[i] = -1;
@@ -97,7 +88,7 @@ namespace ChacoSharp.Connect
                 // Are there any remaining vertices?
                 // Find starting vtx for next BFS.
                 root = (int) (nvtxs * drandom()) + 1;
-                //Console.WriteLine($"looking for next root from: {root}");
+                //Trace.WriteLine($"looking for next root from: {root}");
                 while (mark[root] >= 0)
                 {
                     root++;
@@ -117,7 +108,6 @@ namespace ChacoSharp.Connect
                 *edges = newedge;
                 edgesAdded++;
                 last = bfsearch(graph, root, &visitedVertexCount, mark, vtxlist, edgesAdded);
-                //Console.WriteLine($"Visited {visitedVertexCount} out of {nvtxs} vertices");
             }
 
             return edgesAdded;
@@ -135,11 +125,6 @@ namespace ChacoSharp.Connect
         /// <returns></returns>
         public static int bfsearch(vtx_data** graph, int root, int* count, int* mark, int* vtxlist, int currentComponentNumber)
         {
-            if (FullTrace)
-            {
-                //Console.WriteLine($"<Entering {nameof(bfsearch)} {seconds()}>");
-            }
-
             var firstVertex = 1;
 
             var lastVertexInList = 1;
@@ -180,11 +165,6 @@ namespace ChacoSharp.Connect
                         mark[neighbor] = currentComponentNumber;
                         vtxlist[lastVertexInList++] = neighbor;
                     }
-                }
-
-                if (firstVertex % 1000 == 0)
-                {
-                    //Console.WriteLine($"FirstVertex: {firstVertex}");
                 }
             }
 

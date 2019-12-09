@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.BipartiteMatching.CheckBp;
 using static ChacoSharp.BipartiteMatching.MoveVtxs;
@@ -59,7 +60,7 @@ namespace ChacoSharp.BipartiteMatching
 
             if (DEBUG_BPMATCH == DebugFlagBP.ErrorChecking)
             {
-                Console.WriteLine(" Calling check before movevtxs");
+                Trace.WriteLine(" Calling check before movevtxs");
                 checkbp(graph, xvecs, sets, dist, nvtxs, nsection);
             }
 
@@ -67,7 +68,7 @@ namespace ChacoSharp.BipartiteMatching
 
             if (DEBUG_BPMATCH != DebugFlagBP.NoDebugging)
             {
-                Console.WriteLine(" N_VTX_CHECKS = {0:d}, N_VTX_MOVES = {1:d}", N_VTX_CHECKS, N_VTX_MOVES);
+                Trace.WriteLine($" {nameof(N_VTX_CHECKS)} = {N_VTX_CHECKS:d}, {nameof(N_VTX_MOVES)} = {N_VTX_MOVES:d}");
                 checkbp(graph, xvecs, sets, dist, nvtxs, nsection);
             }
 

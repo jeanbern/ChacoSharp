@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Graph.FindMaxDeg;
@@ -415,8 +416,8 @@ namespace ChacoSharp.RefinePartition
             skip:
             if (error != 0)
             {
-                Console.WriteLine("\nWARNING: No space to refine partition.");
-                Console.WriteLine("         NO PARTITION REFINEMENT PERFORMED.");
+                Trace.WriteLine("\nWARNING: No space to refine partition.");
+                Trace.WriteLine("         NO PARTITION REFINEMENT PERFORMED.");
             }
 
             if (edges_list != null)

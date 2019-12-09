@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Coarsening.Coarsen;
@@ -63,7 +64,7 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering eigensolve, nvtxs = {0:d}, nedges ={1:d}>\n", nvtxs, nedges);
+                Trace.WriteLine($"<Entering eigensolve, nvtxs = {nvtxs:d}, nedges ={nedges:d}>\n");
             }
 
             if (nvtxs <= ndims)
@@ -111,12 +112,12 @@ namespace ChacoSharp.Eigen
                         perturb_init(nvtxs);
                         if (DEBUG_PERTURB)
                         {
-                            Console.WriteLine("Matrix being perturbed with scale {0:E}\n", PERTURB_MAX);
+                            Trace.WriteLine($"Matrix being perturbed with scale {PERTURB_MAX:E}\n");
                         }
                     }
                     else if (DEBUG_PERTURB)
                     {
-                        Console.WriteLine("Matrix not being perturbed\n");
+                        Trace.WriteLine("Matrix not being perturbed\n");
                     }
                 }
 
@@ -179,7 +180,7 @@ namespace ChacoSharp.Eigen
                 {
                     if (WARNING_EVECS > 2)
                     {
-                        Console.WriteLine("WARNING: Not an extended eigenproblem; switching to standard eigensolver.\n");
+                        Trace.WriteLine("WARNING: Not an extended eigenproblem; switching to standard eigensolver.\n");
                     }
                 }
                 else
@@ -243,12 +244,12 @@ namespace ChacoSharp.Eigen
                             perturb_init(nvtxs);
                             if (DEBUG_PERTURB)
                             {
-                                Console.WriteLine("Matrix being perturbed with scale {0:E}\n", PERTURB_MAX);
+                                Trace.WriteLine($"Matrix being perturbed with scale {PERTURB_MAX:E}\n");
                             }
                         }
                         else if (DEBUG_PERTURB)
                         {
-                            Console.WriteLine("Matrix not being perturbed\n");
+                            Trace.WriteLine("Matrix not being perturbed\n");
                         }
                     }
 
@@ -383,7 +384,7 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Leaving eigensolve>\n");
+                Trace.WriteLine("<Leaving eigensolve>\n");
             }
         }
     }

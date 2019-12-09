@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.Orthogonalization;
@@ -91,12 +92,12 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering lanczos_ext>");
+                Trace.WriteLine("<Entering lanczos_ext>");
             }
 
             if (DEBUG_EVECS > 0)
             {
-                Console.WriteLine("Selective orthogonalization Lanczos for extended eigenproblem, matrix size = {0:d}.", n);
+                Trace.WriteLine($"Selective orthogonalization Lanczos for extended eigenproblem, matrix size = {n:d}.");
             }
 
             /* Initialize time. */
@@ -146,10 +147,10 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_EVECS > 0)
             {
-                Console.WriteLine("  maxdeg {0:g}", maxdeg);
-                Console.WriteLine("  goodtol {0:g}", goodtol);
-                Console.WriteLine("  interval {0:d}", interval);
-                Console.WriteLine("  maxj {0:d}", maxj);
+                Trace.WriteLine($"  maxdeg {maxdeg:g}");
+                Trace.WriteLine($"  goodtol {goodtol:g}");
+                Trace.WriteLine($"  interval {interval:d}");
+                Trace.WriteLine($"  maxj {maxj:d}");
             }
 
             /* Initialize space. */
@@ -172,8 +173,8 @@ namespace ChacoSharp.Eigen
             check = Math.Abs(check - ch_norm(r, 1, n));
             if (check > 10 * numerical_zero && WARNING_EVECS > 0)
             {
-                Console.WriteLine("WARNING: In terminal propagation, rhs should have no component in the");
-                Console.WriteLine("         nullspace of the Laplacian, so check val {0:g} should be negligible.", check);
+                Trace.WriteLine("WARNING: In terminal propagation, rhs should have no component in the");
+                Trace.WriteLine($"         nullspace of the Laplacian, so check val {check:g} should be negligible.");
             }
 
             beta[0] = ch_norm(r, 1, n);
@@ -214,7 +215,7 @@ namespace ChacoSharp.Eigen
                     memory_ok = false;
                     if (DEBUG_EVECS > 0 || WARNING_EVECS > 0)
                     {
-                        Console.WriteLine("WARNING: Lanczos_ext out of memory; computing best approximation available.");
+                        Trace.WriteLine("WARNING: Lanczos_ext out of memory; computing best approximation available.");
                     }
 
                     if (nopauses)
@@ -335,33 +336,33 @@ namespace ChacoSharp.Eigen
                     if (DEBUG_EVECS > 2)
                     {
                         time = lanc_seconds();
-                        Console.WriteLine("\nindex         Ritz vals            bji bounds");
+                        Trace.WriteLine("\nindex         Ritz vals            bji bounds");
                         for (i = 1; i <= left_goodlim; i++)
                         {
-                            Console.Write("  {0:d}", i);
+                            Trace.Write("  {i:d}");
                             doubleout(ritz[i], 1);
                             doubleout(bj[i], 1);
-                            Console.WriteLine();
+                            Trace.WriteLine("");
                         }
 
-                        Console.WriteLine();
+                        Trace.WriteLine("");
                         curlnk = scanlist;
                         while (curlnk != null)
                         {
                             temp = curlnk->indx;
                             if ((temp > left_goodlim) && (temp < j))
                             {
-                                Console.Write("  {0:d}", temp);
+                                Trace.Write($"  {temp:d}");
                                 doubleout(ritz[temp], 1);
                                 doubleout(bj[temp], 1);
-                                Console.WriteLine();
+                                Trace.WriteLine("");
                             }
 
                             curlnk = curlnk->pntr;
                         }
 
-                        Console.WriteLine("                            -------------------");
-                        Console.WriteLine("                goodtol:    {0:f}\n", goodtol);
+                        Trace.WriteLine("                            -------------------");
+                        Trace.WriteLine("                goodtol:    {goodtol:f}\n");
                         debug_time += lanc_seconds() - time;
                     }
 
@@ -424,7 +425,7 @@ namespace ChacoSharp.Eigen
                             time = lanc_seconds();
 
                             /* Show some info on the orthogonalization. */
-                            Console.Write("  j {0:d}; goodlim lft {1:d}, rgt {2:d}; list ", j, left_goodlim, 0);
+                            Trace.Write($"  j {j:d}; goodlim lft {left_goodlim:d}, rgt {0:d}; list ");
                             solistout(solist, ngood, j);
 
                             /* Assemble current approx. eigenvector, check residual directly. */
@@ -434,11 +435,11 @@ namespace ChacoSharp.Eigen
                                 scadd(y[1], 1, n, v[k], q[k]);
                             }
 
-                            Console.WriteLine("  extended eigenvalue {0:g}", extval);
-                            Console.WriteLine("  est. extended residual {0:g}", Math.Abs(v[j] * beta[j]));
+                            Trace.WriteLine($"  extended eigenvalue {extval:g}");
+                            Trace.WriteLine($"  est. extended residual {Math.Abs(v[j] * beta[j]):g}");
                             checkeig_ext(workn, u, A, y[1], n, extval, vwsqrt, gvec, eigtol, false);
 
-                            Console.WriteLine("---------------------end of iteration---------------------\n");
+                            Trace.WriteLine("---------------------end of iteration---------------------\n");
                             debug_time += lanc_seconds() - time;
                         }
                     }
@@ -454,15 +455,15 @@ namespace ChacoSharp.Eigen
                 time = lanc_seconds();
                 if (maxj == 0)
                 {
-                    Console.WriteLine("Not extended eigenproblem -- calling ordinary eigensolver.");
+                    Trace.WriteLine("Not extended eigenproblem -- calling ordinary eigensolver.");
                 }
                 else
                 {
-                    Console.WriteLine("  Lanczos_ext itns: {0:d}", j);
-                    Console.WriteLine("  extended eigenvalue: {0:g}", extval);
+                    Trace.WriteLine($"  Lanczos_ext itns: {j:d}");
+                    Trace.WriteLine($"  extended eigenvalue: {extval:g}");
                     if (j == maxj)
                     {
-                        Console.WriteLine("WARNING: Maximum number of Lanczos iterations reached.");
+                        Trace.WriteLine("WARNING: Maximum number of Lanczos iterations reached.");
                     }
                 }
 
@@ -601,12 +602,12 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering lanczos_ext_float>");
+                Trace.WriteLine("<Entering lanczos_ext_float>");
             }
 
             if (DEBUG_EVECS > 0)
             {
-                Console.WriteLine("Selective orthogonalization Lanczos for extended eigenproblem, matrix size = {0:d}.", n);
+                Trace.WriteLine($"Selective orthogonalization Lanczos for extended eigenproblem, matrix size = {n:d}.");
             }
 
             /* Initialize time. */
@@ -659,10 +660,10 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_EVECS > 0)
             {
-                Console.WriteLine("  maxdeg {0:g}", maxdeg);
-                Console.WriteLine("  goodtol {0:g}", goodtol);
-                Console.WriteLine("  interval {0:d}", interval);
-                Console.WriteLine("  maxj {0:d}", maxj);
+                Trace.WriteLine($"  maxdeg {maxdeg:g}");
+                Trace.WriteLine($"  goodtol {goodtol:g}");
+                Trace.WriteLine($"  interval {interval:d}");
+                Trace.WriteLine($"  maxj {maxj:d}");
             }
 
             /* Make a float copy of vwsqrt */
@@ -692,8 +693,8 @@ namespace ChacoSharp.Eigen
             check = Math.Abs(check - norm_float(r, 1, n));
             if (check > 10 * numerical_zero && WARNING_EVECS > 0)
             {
-                Console.WriteLine("WARNING: In terminal propagation, rhs should have no component in the");
-                Console.WriteLine("         nullspace of the Laplacian, so check val {0:g} should be zero.", check);
+                Trace.WriteLine("WARNING: In terminal propagation, rhs should have no component in the");
+                Trace.WriteLine($"         nullspace of the Laplacian, so check val {check:g} should be zero.");
             }
 
             beta[0] = norm_float(r, 1, n);
@@ -734,7 +735,7 @@ namespace ChacoSharp.Eigen
                     memory_ok = false;
                     if (DEBUG_EVECS > 0 || WARNING_EVECS > 0)
                     {
-                        Console.WriteLine("WARNING: Lanczos_ext out of memory; computing best approximation available.");
+                        Trace.WriteLine("WARNING: Lanczos_ext out of memory; computing best approximation available.");
                     }
 
                     if (nopauses)
@@ -855,33 +856,33 @@ namespace ChacoSharp.Eigen
                     if (DEBUG_EVECS > 2)
                     {
                         time = lanc_seconds();
-                        Console.WriteLine("\nindex         Ritz vals            bji bounds");
+                        Trace.WriteLine("\nindex         Ritz vals            bji bounds");
                         for (i = 1; i <= left_goodlim; i++)
                         {
-                            Console.Write("  {0:d}", i);
+                            Trace.Write($"  {i:d}");
                             doubleout(ritz[i], 1);
                             doubleout(bj[i], 1);
-                            Console.WriteLine();
+                            Trace.WriteLine("");
                         }
 
-                        Console.WriteLine();
+                        Trace.WriteLine("");
                         curlnk = scanlist;
                         while (curlnk != null)
                         {
                             temp = curlnk->indx;
                             if ((temp > left_goodlim) && (temp < j))
                             {
-                                Console.Write("  {0:d}", temp);
+                                Trace.Write($"  {temp:d}");
                                 doubleout(ritz[temp], 1);
                                 doubleout(bj[temp], 1);
-                                Console.WriteLine();
+                                Trace.WriteLine("");
                             }
 
                             curlnk = curlnk->pntr;
                         }
 
-                        Console.WriteLine("                            -------------------");
-                        Console.WriteLine("                goodtol:    {0:f}\n", goodtol);
+                        Trace.WriteLine("                            -------------------");
+                        Trace.WriteLine($"                goodtol:    {goodtol:f}\n");
                         debug_time += lanc_seconds() - time;
                     }
 
@@ -955,9 +956,9 @@ namespace ChacoSharp.Eigen
                         if (DEBUG_EVECS > 2)
                         {
                             time = lanc_seconds();
-                            Console.Write("  j {0:d}; goodlim lft {1:d}, rgt {2:d}; list ", j, left_goodlim, 0);
+                            Trace.Write($"  j {j:d}; goodlim lft {left_goodlim:d}, rgt {0:d}; list ");
                             solistout_float(solist, ngood, j);
-                            Console.WriteLine("---------------------end of iteration---------------------\n");
+                            Trace.WriteLine("---------------------end of iteration---------------------\n");
                             debug_time += lanc_seconds() - time;
                         }
                     }
@@ -973,13 +974,13 @@ namespace ChacoSharp.Eigen
                 time = lanc_seconds();
                 if (maxj == 0)
                 {
-                    Console.WriteLine("Not extended eigenproblem -- calling ordinary eigensolver.");
+                    Trace.WriteLine("Not extended eigenproblem -- calling ordinary eigensolver.");
                 }
                 else
                 {
-                    Console.WriteLine("  Lanczos_ext itns: {0:d}", j);
-                    Console.WriteLine("  eigenvalue: {0:g}", ritz[1]);
-                    Console.WriteLine("  extended eigenvalue: {0:g}", extval);
+                    Trace.WriteLine($"  Lanczos_ext itns: {j:d}");
+                    Trace.WriteLine($"  eigenvalue: {ritz[1]:g}");
+                    Trace.WriteLine($"  extended eigenvalue: {extval:g}");
                 }
 
                 debug_time += lanc_seconds() - time;
@@ -1008,12 +1009,12 @@ namespace ChacoSharp.Eigen
                 resid = ch_norm(workn_double, 1, n);
                 if (DEBUG_EVECS > 0)
                 {
-                    Console.WriteLine("  extended residual: {0:g}", resid);
+                    Trace.WriteLine($"  extended residual: {resid:g}");
                 }
 
                 if (WARNING_EVECS > 0 && resid > eigtol)
                 {
-                    Console.WriteLine("WARNING: Extended residual ({0:g}) greater than tolerance ({1:g}).", resid, eigtol);
+                    Trace.WriteLine($"WARNING: Extended residual ({resid:g}) greater than tolerance ({eigtol:g}).");
                 }
 
                 debug_time += lanc_seconds() - time;

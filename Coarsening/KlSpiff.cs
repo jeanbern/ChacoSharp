@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.Timer;
@@ -42,7 +43,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering klspiff, nvtxs = {0:d}>", nvtxs);
+                Trace.WriteLine($"<Entering klspiff, {nameof(nvtxs)} = {nvtxs:d}>");
             }
 
             /* Find the largest hop value. */
@@ -100,7 +101,7 @@ namespace ChacoSharp.Coarsening
             {
                 if (DEBUG_KL != DebugFlagKL.NoDebugging)
                 {
-                    Console.WriteLine(" Before KL: ");
+                    Trace.WriteLine(" Before KL: ");
                     count(graph, nvtxs, sets, nsets, hops, false, useEdgeWeights);
                 }
 
@@ -111,15 +112,15 @@ namespace ChacoSharp.Coarsening
 
                 if (DEBUG_KL == DebugFlagKL.MoreInfo || DEBUG_KL == DebugFlagKL.PrintBucket)
                 {
-                    Console.WriteLine(" After KL:");
+                    Trace.WriteLine(" After KL:");
                     count(graph, nvtxs, sets, nsets, hops, false, useEdgeWeights);
                 }
             }
 
             if (error)
             {
-                Console.WriteLine("\nWARNING: No space to perform KL on graph with {0:d} vertices.", nvtxs);
-                Console.WriteLine("         NO LOCAL REFINEMENT PERFORMED.\n");
+                Trace.WriteLine($"\nWARNING: No space to perform KL on graph with {nvtxs:d} vertices.");
+                Trace.WriteLine("         NO LOCAL REFINEMENT PERFORMED.\n");
             }
 
             free_kl(buckets, listspace, dvals, tops);
@@ -315,7 +316,7 @@ public static void compress_ewgts(vtx_data **graph,      /* list of graph info f
   else if (ewgt_max < EWGT_RATIO_MAX * nvtxs) {
     /* If not too heavy, leave it alone. */
     old_ewgts = null;
-    Console.WriteLine("In compress_ewgts, but not too heavy, ewgt_max = {0:g}, nvtxs = {1:d}", ewgt_max, nvtxs);
+    Trace.WriteLine($"In compress_ewgts, but not too heavy, ewgt_max = {ewgt_max:g}, nvtxs = {nvtxs:d}");
   }
 
   else { /* Otherwise, compress edge weights. */
@@ -323,7 +324,7 @@ public static void compress_ewgts(vtx_data **graph,      /* list of graph info f
     old_ewgts = graph[1]->ewgts;
     new_ewgts = (float*)Marshal.AllocHGlobal((2 * nedges + nvtxs) * sizeof(float));
     ratio     = (EWGT_RATIO_MAX * nvtxs) / ewgt_max;
-    Console.WriteLine("In compress_ewgts, ewgt_max = {0:g}, nvtxs = {1:d}, ratio = {2:e}", ewgt_max, nvtxs, ratio);
+    Trace.WriteLine("In compress_ewgts, ewgt_max = {ewgt_max:g}, nvtxs = {nvtxs:d}, ratio = {ratio:e}");
     old_ewptr = old_ewgts;
     new_ewptr = new_ewgts;
     for (i = 1; i <= nvtxs; i++) {

@@ -1,5 +1,4 @@
-﻿using static ChacoSharp.StaticConstants;
-using System;
+﻿using System.Diagnostics;
 
 namespace ChacoSharp.Graph
 {
@@ -20,10 +19,7 @@ namespace ChacoSharp.Graph
         /// <param name="useEdgeWeights">are edge weights being used?</param>
         public static void make_subgraph(vtx_data** graph, vtx_data** subgraph, int subnvtxs, int* psubnedges, int* assignment, int set, int* glob2loc, int* loc2glob, int* degree, bool useEdgeWeights)
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(make_subgraph)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(make_subgraph)}>");
 
             var subgraphEdgeCount = 0;
             for (var i = 1; i <= subnvtxs; i++)
@@ -96,10 +92,7 @@ namespace ChacoSharp.Graph
         /// <param name="useEdgeWeights">are edge weights being used?</param>
         public static void remake_graph(vtx_data** subgraph, int subnvtxs, int* loc2glob, int* degree, bool useEdgeWeights)
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(remake_graph)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(remake_graph)}>");
 
             vtx_data* subgptr; /* loops through subgraph */
             double ewgtsum; /* sum of weights of subgraph edges */

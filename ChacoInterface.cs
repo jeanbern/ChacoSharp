@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.Timer;
@@ -64,7 +65,7 @@ namespace ChacoSharp
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering INTERFACE>");
+                Trace.WriteLine("<Entering INTERFACE>");
             }
 
             if (goal == null)
@@ -115,7 +116,7 @@ namespace ChacoSharp
                 goal = new double[totalSetsCreated];
                 if (goal == null)
                 {
-                    Console.WriteLine("\nERROR: No room to make goals.");
+                    Trace.WriteLine("\nERROR: No room to make goals.");
                     flag = true;
                     goto skip;
                 }
@@ -135,13 +136,13 @@ namespace ChacoSharp
                 /* Generate vertex weights equal to degree of node. */
                 if (vwgts != null)
                 {
-                    Console.WriteLine("WARNING: Vertex weights being overwritten by vertex degrees.");
+                    Trace.WriteLine("WARNING: Vertex weights being overwritten by vertex degrees.");
                 }
 
                 vwgts = (int*) Marshal.AllocHGlobal(nvtxs * sizeof(int));
                 if (vwgts == null)
                 {
-                    Console.WriteLine("\nERROR: No room to make vertex weights.");
+                    Trace.WriteLine("\nERROR: No room to make vertex weights.");
                     flag = true;
                     goto skip;
                 }
@@ -173,7 +174,7 @@ namespace ChacoSharp
 
                 if (flag)
                 {
-                    Console.WriteLine("\nERROR: No room to reformat graph.");
+                    Trace.WriteLine("\nERROR: No room to reformat graph.");
                     goto skip;
                 }
 
@@ -210,7 +211,7 @@ namespace ChacoSharp
                     coords = (float**) Marshal.AllocHGlobal(3 * sizeof(float*));
                     if (coords == null)
                     {
-                        Console.WriteLine("\nERROR: No room to make coordinate array.");
+                        Trace.WriteLine("\nERROR: No room to make coordinate array.");
                         flag = true;
                         goto skip;
                     }

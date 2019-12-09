@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.CpVec;
 using static ChacoSharp.Utilities.Norm;
@@ -44,7 +45,7 @@ namespace ChacoSharp.Eigen
                 cpvec(v, 1, j, s);
                 if (DEBUG_EVECS > 0)
                 {
-                    Console.WriteLine("Degenerate extended eigenvector problem (g = 0).");
+                    Trace.WriteLine("Degenerate extended eigenvector problem (g = 0).");
                 }
 
                 return;
@@ -59,15 +60,15 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_EVECS > 2)
             {
-                Console.WriteLine("Computing extended eigenpairs of T");
-                Console.WriteLine("  target norm_v (= sigma) {0:g}", sigma);
-                Console.WriteLine("  bisection tolerance {0:g}", tol);
+                Trace.WriteLine("Computing extended eigenpairs of T");
+                Trace.WriteLine($"  target norm_v (= sigma) {sigma:g}");
+                Trace.WriteLine($"  bisection tolerance {tol:g}");
             }
 
             if (DEBUG_EVECS > 3)
             {
-                Console.WriteLine("  lambda iterates to the extended eigenvalue");
-                Console.WriteLine("         lambda_low           lambda            lambda_high      norm_v");
+                Trace.WriteLine("  lambda iterates to the extended eigenvalue");
+                Trace.WriteLine("         lambda_low           lambda            lambda_high      norm_v");
             }
 
             /* Bisection loop - iterate until norm constraint is satisfied */
@@ -80,7 +81,7 @@ namespace ChacoSharp.Eigen
                 norm_v = ch_norm(v, 1, j);
                 if (DEBUG_EVECS > 3)
                 {
-                    Console.WriteLine("{0:i}   {1:f}  {2:f}  {3:f}  {4:g}", cnt++, lambda_low, lambda, lambda_high, norm_v);
+                    Trace.WriteLine($"{cnt++:i}   {lambda_low:f}  {lambda:f}  {lambda_high:f}  {norm_v:g}");
                 }
 
                 if (norm_v <= sigma)

@@ -1,7 +1,10 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Graph.CheckGraph;
+// ReSharper disable HeuristicUnreachableCode
+#pragma warning disable 162
 
 namespace ChacoSharp.Input
 {
@@ -13,7 +16,6 @@ namespace ChacoSharp.Input
             int nedges, /* number of edges */
             int igeom, /* geometric dimension for inertial method */
             float** coords, /* coordinates for inertial method */
-            string graphname, /* graph input file name */
             int* assignment, /* set numbers if read-from-file */
             double[] goal, /* desired sizes of different sets */
             int architecture, /* 0=> hypercube, d=> d-dimensional mesh */
@@ -32,9 +34,9 @@ namespace ChacoSharp.Input
                 throw new ArgumentNullException(nameof(mesh_dims));
             }
 
-            if (DEBUG_TRACE || FullTrace)
+            if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering check_input>");
+                Trace.WriteLine("<Entering check_input>");
             }
 
             /* First check for consistency in the graph. */
@@ -44,11 +46,11 @@ namespace ChacoSharp.Input
                 graphError = check_graph(graph, nvtxs, nedges);
                 if (graphError)
                 {
-                    Console.WriteLine("ERRORS in graph.");
+                    Trace.WriteLine("ERRORS in graph.");
                 }
                 else
                 {
-                    Console.WriteLine("Graph check OK");
+                    Trace.WriteLine("Graph check OK");
                 }
             }
             else
@@ -57,7 +59,7 @@ namespace ChacoSharp.Input
                 graphError = false;
                 if (partitioningStrategy == PartitioningStrategy.Multilevel_KL || partitioningStrategy == PartitioningStrategy.Spectral || localParitioningStrategy == LocalPartitioningStrategy.KernighanLin)
                 {
-                    Console.WriteLine("No graph input.  Only allowed for inertial or simple methods without KL.");
+                    Trace.WriteLine("No graph input.  Only allowed for inertial or simple methods without KL.");
                     graphError = true;
                 }
             }
@@ -68,14 +70,14 @@ namespace ChacoSharp.Input
 
             if (architecture < 0 || architecture > 3)
             {
-                Console.WriteLine("Machine architecture parameter = {0:d}, must be in [0,3].", architecture);
+                Trace.WriteLine($"Machine architecture parameter = {architecture:d}, must be in [0,3].");
                 errorFound = true;
             }
             else if (architecture == 0)
             {
                 if (ndims_tot < 0)
                 {
-                    Console.WriteLine("Dimension of hypercube = {0:d}, must be at least 1.", ndims_tot);
+                    Trace.WriteLine($"Dimension of hypercube = {ndims_tot:d}, must be at least 1.");
                     errorFound = true;
                 }
             }
@@ -83,26 +85,26 @@ namespace ChacoSharp.Input
             {
                 if (architecture == 1 && mesh_dims[0] <= 0)
                 {
-                    Console.WriteLine("Size of 1-D mesh improperly specified, {0:d}.", mesh_dims[0]);
+                    Trace.WriteLine($"Size of 1-D mesh improperly specified, {mesh_dims[0]:d}.");
                     errorFound = true;
                 }
 
                 if (architecture == 2 && (mesh_dims[0] <= 0 || mesh_dims[1] <= 0))
                 {
-                    Console.WriteLine("Size of 2-D mesh improperly specified, {0:d}x{1:d}.", mesh_dims[0], mesh_dims[1]);
+                    Trace.WriteLine($"Size of 2-D mesh improperly specified, {mesh_dims[0]:d}x{mesh_dims[1]:d}.");
                     errorFound = true;
                 }
 
                 if (architecture == 2 && (mesh_dims[0] <= 0 || mesh_dims[1] <= 0 || mesh_dims[2] <= 0))
                 {
-                    Console.WriteLine("Size of 3-D mesh improperly specified, {0:d}x{1:d}x{2:d}.", mesh_dims[0], mesh_dims[1], mesh_dims[2]);
+                    Trace.WriteLine($"Size of 3-D mesh improperly specified, {mesh_dims[0]:d}x{mesh_dims[1]:d}x{mesh_dims[2]:d}.");
                     errorFound = true;
                 }
             }
 
             if (ndims < 1 || ndims > MAXDIMS)
             {
-                Console.WriteLine("Partitioning at each step = {0:d}, should be in [1,{1:d}].", ndims, MAXDIMS);
+                Trace.WriteLine($"Partitioning at each step = {ndims:d}, should be in [1,{MAXDIMS:d}].");
                 errorFound = true;
             }
 
@@ -121,19 +123,19 @@ namespace ChacoSharp.Input
 
             if (1 << ndims > nprocs)
             {
-                Console.WriteLine("Partitioning step {0:d} too large for {1:d} processors.", ndims, nprocs);
+                Trace.WriteLine($"Partitioning step {ndims:d} too large for {nprocs:d} processors.");
                 errorFound = true;
             }
 
             if ((int) partitioningStrategy < 1 || (int) partitioningStrategy > 7)
             {
-                Console.WriteLine("Global partitioning method = {0:d}, must be in [1,7].", (int) partitioningStrategy);
+                Trace.WriteLine($"Global partitioning method = {(int) partitioningStrategy:d}, must be in [1,7].");
                 errorFound = true;
             }
 
             if ((int) localParitioningStrategy < 1 || (int) localParitioningStrategy > 2)
             {
-                Console.WriteLine("Local partitioning method = {0:d}, must be in [1,2].", (int) localParitioningStrategy);
+                Trace.WriteLine($"Local partitioning method = {(int) localParitioningStrategy:d}, must be in [1,2].");
                 errorFound = true;
             }
 
@@ -142,14 +144,14 @@ namespace ChacoSharp.Input
                 var i = 2 * (1 << ndims);
                 if (*vmax < i)
                 {
-                    Console.WriteLine("WARNING: Number of vertices in coarse graph ({0:d}) being reset to {1:d}.", *vmax, i);
+                    Trace.WriteLine($"WARNING: Number of vertices in coarse graph ({*vmax:d}) being reset to {i:d}.");
                     *vmax = i;
                 }
             }
 
             if ((partitioningStrategy == PartitioningStrategy.Multilevel_KL || partitioningStrategy == PartitioningStrategy.Spectral) && eigtol <= 0)
             {
-                Console.WriteLine("Eigen tolerance ({0:g}) must be positive value", eigtol);
+                Trace.WriteLine($"Eigen tolerance ({eigtol:g}) must be positive value");
                 errorFound = true;
             }
 
@@ -158,28 +160,28 @@ namespace ChacoSharp.Input
             {
                 if (igeom < 1 || igeom > 3)
                 {
-                    Console.WriteLine("Geometry must be 1-, 2- or 3-dimensional");
+                    Trace.WriteLine("Geometry must be 1-, 2- or 3-dimensional");
                     errorFound = true;
                 }
 
                 if (igeom > 0 && coords == null)
                 {
-                    Console.WriteLine("No coordinates given");
+                    Trace.WriteLine("No coordinates given");
                     errorFound = false;
                 }
                 else if (igeom > 0 && coords[0] == null)
                 {
-                    Console.WriteLine("No X-coordinates given");
+                    Trace.WriteLine("No X-coordinates given");
                     errorFound = true;
                 }
                 else if (igeom > 1 && coords[1] == null)
                 {
-                    Console.WriteLine("No Y-coordinates given");
+                    Trace.WriteLine("No Y-coordinates given");
                     errorFound = true;
                 }
                 else if (igeom > 2 && coords[2] == null)
                 {
-                    Console.WriteLine("No Z-coordinates given");
+                    Trace.WriteLine("No Z-coordinates given");
                     errorFound = true;
                 }
             }
@@ -188,8 +190,8 @@ namespace ChacoSharp.Input
             {
                 if (nprocs > 1 << ndims)
                 {
-                    Console.WriteLine("Can only use local method on single level of read-in assignment,");
-                    Console.WriteLine("  but ndims =  {0:d}, while number of processors = {1:d}.", ndims, nprocs);
+                    Trace.WriteLine("Can only use local method on single level of read-in assignment,");
+                    Trace.WriteLine($"  but ndims =  {ndims:d}, while number of processors = {nprocs:d}.");
                     errorFound = true;
                 }
             }
@@ -214,7 +216,7 @@ namespace ChacoSharp.Input
             {
                 if (goal[i] < 0)
                 {
-                    Console.WriteLine("goal[{0:d}] is {1:g}, but should be nonnegative.", i, goal[i]);
+                    Trace.WriteLine($"goal[{i:d}] is {goal[i]:g}, but should be nonnegative.");
                     errorFound = true;
                 }
 
@@ -223,7 +225,7 @@ namespace ChacoSharp.Input
 
             if (Math.Abs(vertexWeightSum - vertexGoalSum) > 1e-5 * (vertexWeightSum + vertexGoalSum))
             {
-                Console.WriteLine("Sum of values in goal ({0:g}) not equal to sum of vertex weights ({1:g}).", vertexGoalSum, vertexWeightSum);
+                Trace.WriteLine($"Sum of values in goal ({vertexGoalSum:g}) not equal to sum of vertex weights ({vertexWeightSum:g}).");
                 errorFound = true;
             }
 
@@ -253,7 +255,7 @@ namespace ChacoSharp.Input
 
             if (OUTPUT_TIME < 0 || OUTPUT_TIME > 2)
             {
-                Console.WriteLine("WARNING: OUTPUT_TIME ({0:d}) should be in [0,2].", OUTPUT_TIME);
+                Trace.WriteLine($"WARNING: OUTPUT_TIME ({OUTPUT_TIME:d}) should be in [0,2].");
             }
 
             if (partitioningStrategy == PartitioningStrategy.Multilevel_KL || partitioningStrategy == PartitioningStrategy.Spectral)
@@ -262,7 +264,7 @@ namespace ChacoSharp.Input
                 {
                     if ((int) LANCZOS_TYPE < 1 || (int) LANCZOS_TYPE > 4)
                     {
-                        Console.WriteLine("LANCZOS_TYPE ({0:d}) should be in [1,4].", (int) LANCZOS_TYPE);
+                        Trace.WriteLine($"LANCZOS_TYPE ({(int) LANCZOS_TYPE:d}) should be in [1,4].");
                         parameterErrorDetected = true;
                     }
                 }
@@ -270,53 +272,53 @@ namespace ChacoSharp.Input
                 {
                     if ((int) LANCZOS_TYPE < 1 || (int) LANCZOS_TYPE > 3)
                     {
-                        Console.WriteLine("LANCZOS_TYPE ({0:d}) should be in [1,3].", (int) LANCZOS_TYPE);
+                        Trace.WriteLine($"LANCZOS_TYPE ({(int) LANCZOS_TYPE:d}) should be in [1,3].");
                         parameterErrorDetected = true;
                     }
                 }
 
                 if (EIGEN_TOLERANCE <= 0)
                 {
-                    Console.WriteLine("EIGEN_TOLERANCE ({0:g}) should be positive.", EIGEN_TOLERANCE);
+                    Trace.WriteLine($"EIGEN_TOLERANCE ({EIGEN_TOLERANCE:g}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
                 if (LANCZOS_SO_INTERVAL <= 0)
                 {
-                    Console.WriteLine("LANCZOS_SO_INTERVAL ({0:d}) should be positive.", LANCZOS_SO_INTERVAL);
+                    Trace.WriteLine($"LANCZOS_SO_INTERVAL ({LANCZOS_SO_INTERVAL:d}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
                 if (LANCZOS_SO_INTERVAL == 1)
                 {
-                    Console.WriteLine("WARNING: More efficient if LANCZOS_SO_INTERVAL = 2, not 1.");
+                    Trace.WriteLine("WARNING: More efficient if LANCZOS_SO_INTERVAL = 2, not 1.");
                 }
 
                 if (BISECTION_SAFETY <= 0)
                 {
-                    Console.WriteLine("BISECTION_SAFETY ({0:g}) should be positive.", BISECTION_SAFETY);
+                    Trace.WriteLine($"BISECTION_SAFETY ({BISECTION_SAFETY:g}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
                 if (LANCZOS_CONVERGENCE_MODE < 0 || LANCZOS_CONVERGENCE_MODE > 1)
                 {
-                    Console.WriteLine("LANCZOS_CONVERGENCE_MODE ({0:d}) should be in [0,1].", LANCZOS_CONVERGENCE_MODE);
+                    Trace.WriteLine($"LANCZOS_CONVERGENCE_MODE ({LANCZOS_CONVERGENCE_MODE:d}) should be in [0,1].");
                     parameterErrorDetected = true;
                 }
 
                 if (WARNING_ORTHTOL <= 0.0d)
                 {
-                    Console.WriteLine("WARNING: WARNING_ORTHTOL ({0:g}) should be positive.", WARNING_ORTHTOL);
+                    Trace.WriteLine($"WARNING: WARNING_ORTHTOL ({WARNING_ORTHTOL:g}) should be positive.");
                 }
 
                 if (WARNING_MISTOL <= 0.0d)
                 {
-                    Console.WriteLine("WARNING: WARNING_MISTOL ({0:g}) should be positive.", WARNING_MISTOL);
+                    Trace.WriteLine($"WARNING: WARNING_MISTOL ({WARNING_MISTOL:g}) should be positive.");
                 }
 
                 if (LANCZOS_SO_PRECISION < 1 || LANCZOS_SO_PRECISION > 2)
                 {
-                    Console.WriteLine("LANCZOS_SO_PRECISION ({0:d}) should be in [1,2].", LANCZOS_SO_PRECISION);
+                    Trace.WriteLine($"LANCZOS_SO_PRECISION ({LANCZOS_SO_PRECISION:d}) should be in [1,2].");
                     parameterErrorDetected = true;
                 }
 
@@ -324,26 +326,26 @@ namespace ChacoSharp.Input
                 {
                     if (NPERTURB < 0)
                     {
-                        Console.WriteLine("NPERTURB ({0:d}) should be nonnegative.", NPERTURB);
+                        Trace.WriteLine($"NPERTURB ({NPERTURB:d}) should be nonnegative.");
                         parameterErrorDetected = true;
                     }
 
                     if (NPERTURB > 0 && PERTURB_MAX < 0)
                     {
-                        Console.WriteLine("PERTURB_MAX ({0:g}) should be nonnegative.", PERTURB_MAX);
+                        Trace.WriteLine($"PERTURB_MAX ({PERTURB_MAX:g}) should be nonnegative.");
                         parameterErrorDetected = true;
                     }
                 }
 
                 if ((int) MAPPING_TYPE < 0 || (int) MAPPING_TYPE > 3)
                 {
-                    Console.WriteLine("MAPPING_TYPE ({0:d}) should be in [0,3].", (int) MAPPING_TYPE);
+                    Trace.WriteLine($"MAPPING_TYPE ({(int) MAPPING_TYPE:d}) should be in [0,3].");
                     parameterErrorDetected = true;
                 }
 
                 if (ndims == 3 && OPT3D_NTRIES <= 0)
                 {
-                    Console.WriteLine("OPT3D_NTRIES ({0:d}) should be positive.", OPT3D_NTRIES);
+                    Trace.WriteLine($"OPT3D_NTRIES ({OPT3D_NTRIES:d}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
@@ -351,25 +353,25 @@ namespace ChacoSharp.Input
                 {
                     if (COARSE_NLEVEL_RQI <= 0)
                     {
-                        Console.WriteLine("COARSE_NLEVEL_RQI ({0:d}) should be positive.", COARSE_NLEVEL_RQI);
+                        Trace.WriteLine($"COARSE_NLEVEL_RQI ({COARSE_NLEVEL_RQI:d}) should be positive.");
                         parameterErrorDetected = true;
                     }
 
                     if (RQI_CONVERGENCE_MODE < 0 || RQI_CONVERGENCE_MODE > 1)
                     {
-                        Console.WriteLine("RQI_CONVERGENCE_MODE ({0:d}) should be in [0,1].", RQI_CONVERGENCE_MODE);
+                        Trace.WriteLine($"RQI_CONVERGENCE_MODE ({RQI_CONVERGENCE_MODE:d}) should be in [0,1].");
                         parameterErrorDetected = true;
                     }
 
                     if (TERM_PROP)
                     {
-                        Console.WriteLine("WARNING: Using default Lanczos for extended eigenproblem, not RQI/Symmlq.");
+                        Trace.WriteLine("WARNING: Using default Lanczos for extended eigenproblem, not RQI/Symmlq.");
                     }
                 }
 
                 if (partitioningStrategy == PartitioningStrategy.Multilevel_KL && COARSE_NLEVEL_KL <= 0)
                 {
-                    Console.WriteLine("COARSE_NLEVEL_KL ({0:d}) should be positive.", COARSE_NLEVEL_KL);
+                    Trace.WriteLine($"COARSE_NLEVEL_KL ({COARSE_NLEVEL_KL:d}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
@@ -377,13 +379,13 @@ namespace ChacoSharp.Input
                 {
                     if (COARSEN_RATIO_MIN < .5)
                     {
-                        Console.WriteLine("COARSEN_RATIO_MIN ({0:g}) should be at least 1/2.", COARSEN_RATIO_MIN);
+                        Trace.WriteLine($"COARSEN_RATIO_MIN ({COARSEN_RATIO_MIN:g}) should be at least 1/2.");
                         parameterErrorDetected = true;
                     }
 
                     if ((int)MATCH_TYPE < 1 || (int)MATCH_TYPE > 9)
                     {
-                        Console.WriteLine("MATCH_TYPE ({0:d}) should be in [1,9].", MATCH_TYPE);
+                        Trace.WriteLine($"MATCH_TYPE ({MATCH_TYPE:d}) should be in [1,9].");
                         parameterErrorDetected = true;
                     }
                 }
@@ -393,32 +395,32 @@ namespace ChacoSharp.Input
             {
                 if ((int)KL_METRIC < 1 || (int)KL_METRIC > 2)
                 {
-                    Console.WriteLine("KL_METRIC ({0:d}) should be in [1,2].", KL_METRIC);
+                    Trace.WriteLine($"KL_METRIC ({KL_METRIC:d}) should be in [1,2].");
                     parameterErrorDetected = true;
                 }
 
                 if (KL_BAD_MOVES < 0)
                 {
-                    Console.WriteLine("KL_BAD_MOVES ({0:d}) should be non-negative.", KL_BAD_MOVES);
+                    Trace.WriteLine($"KL_BAD_MOVES ({KL_BAD_MOVES:d}) should be non-negative.");
                     parameterErrorDetected = true;
                 }
 
                 if (KL_NTRIES_BAD < 0)
                 {
-                    Console.WriteLine("KL_NTRIES_BAD ({0:d}) should be non-negative.", KL_NTRIES_BAD);
+                    Trace.WriteLine($"KL_NTRIES_BAD ({KL_NTRIES_BAD:d}) should be non-negative.");
                     parameterErrorDetected = true;
                 }
 
                 if (KL_IMBALANCE < 0.0 || KL_IMBALANCE > 1.0)
                 {
-                    Console.WriteLine("KL_IMBALANCE ({0:g}) should be in [0,1].", KL_IMBALANCE);
+                    Trace.WriteLine($"KL_IMBALANCE ({KL_IMBALANCE:g}) should be in [0,1].");
                     parameterErrorDetected = true;
                 }
             }
 
             if (SIMULATOR < 0 || SIMULATOR > 3)
             {
-                Console.WriteLine("SIMULATOR ({0:d}) should be in [0,3].", SIMULATOR);
+                Trace.WriteLine($"SIMULATOR ({SIMULATOR:d}) should be in [0,3].");
                 parameterErrorDetected = true;
             }
 
@@ -427,13 +429,13 @@ namespace ChacoSharp.Input
             {
                 if (CUT_TO_HOP_COST <= 0)
                 {
-                    Console.WriteLine("CUT_TO_HOP_COST ({0:g}) should be positive.", CUT_TO_HOP_COST);
+                    Trace.WriteLine($"CUT_TO_HOP_COST ({CUT_TO_HOP_COST:g}) should be positive.");
                     parameterErrorDetected = true;
                 }
 
                 if (ndims > 1)
                 {
-                    Console.WriteLine("WARNING: May ignore terminal propagation in spectral quadri/octa section");
+                    Trace.WriteLine("WARNING: May ignore terminal propagation in spectral quadri/octa section");
                 }
             }
 
@@ -454,18 +456,18 @@ namespace ChacoSharp.Input
             {
                 if (assignment[i] < 0)
                 {
-                    Console.WriteLine("Assignment[{0:d}] = {1:d} less than zero.", i, assignment[i]);
+                    Trace.WriteLine($"Assignment[{i:d}] = {assignment[i]:d} less than zero.");
                     flag = true;
                 }
                 else if (assignment[i] >= nsets_tot)
                 {
-                    Console.WriteLine("Assignment[{0:d}] = {1:d}, too large for {2:d} sets.", i, assignment[i], nsets_tot);
+                    Trace.WriteLine($"Assignment[{i:d}] = {assignment[i]:d}, too large for {nsets_tot:d} sets.");
                     flag = true;
                 }
                 else if (localPartitioningStrategy == LocalPartitioningStrategy.KernighanLin && assignment[i] >= nsets)
                 {
-                    Console.WriteLine("Can only use local method on single level of read-in assignment,");
-                    Console.WriteLine("  but assignment[{0:d}] =  {1:d}.", i, assignment[i]);
+                    Trace.WriteLine("Can only use local method on single level of read-in assignment,");
+                    Trace.WriteLine($"  but assignment[{i:d}] =  {assignment[i]:d}.");
                     flag = true;
                 }
             }

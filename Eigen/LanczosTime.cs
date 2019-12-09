@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.Utilities.Timer;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.Orthogonalization;
@@ -55,7 +56,7 @@ public static bool lanpause(int      j,         /* current step */
       paige_dot = Math.Abs(dot(q[1], 1, n, q[j]));
       if ((paige_dot > paigetol && j > 1) || beta < 1000 * DOUBLE_EPSILON) {
         if (DEBUG_EVECS > 1) {
-          Console.WriteLine("  Pausing on step {0:d} with Paige prod. = {1:g}", j, paige_dot);
+          Trace.WriteLine($"  Pausing on step {j:d} with Paige prod. = {paige_dot:g}");
         }
         *pausemode = 2;
         return (true);
@@ -111,7 +112,7 @@ public static bool lanpause_float(int     j,         /* current step */
       paige_dot = Math.Abs(dot_float(q[1], 1, n, q[j]));
       if ((paige_dot > paigetol && j > 1) || beta < 1000 * DOUBLE_EPSILON) {
         if (DEBUG_EVECS > 1) {
-          Console.WriteLine("  Pausing on step {0:d} with Paige prod. = {1:g}", j, paige_dot);
+          Trace.WriteLine($"  Pausing on step {j:d} with Paige prod. = {paige_dot:g}");
         }
         *pausemode = 2;
         return (true);

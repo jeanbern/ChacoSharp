@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 
 namespace ChacoSharp.Eigen
@@ -86,7 +87,7 @@ namespace ChacoSharp.Eigen
                 res = Math.Sqrt(res);
                 if (res > 1.0e-13)
                 {
-                    Console.WriteLine("Tridiagonal solve residual {0:g}", res);
+                    Trace.WriteLine($"Tridiagonal solve residual {res:g}");
                 }
             }
         }

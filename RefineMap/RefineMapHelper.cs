@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Graph.FindMaxDeg;
 using static ChacoSharp.Graph.FreeGraph;
@@ -80,8 +81,8 @@ public static void refine_map(vtx_data **graph,        /* graph data structure *
 skip:
 
   if (error) {
-    Console.WriteLine("\nWARNING: No space to refine mapping to processors.");
-    Console.WriteLine("         NO MAPPING REFINEMENT PERFORMED.\n");
+    Trace.WriteLine("\nWARNING: No space to refine mapping to processors.");
+    Trace.WriteLine("         NO MAPPING REFINEMENT PERFORMED.\n");
   }
 
   Marshal.FreeHGlobal((IntPtr)node2vtx);

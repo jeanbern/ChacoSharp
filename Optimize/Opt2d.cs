@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Optimize.Func2d;
 
@@ -129,7 +130,7 @@ namespace ChacoSharp.Optimize
 
             if (DEBUG_OPTIMIZE)
             {
-                Console.WriteLine("After {0:d} passes, func={1:e}, theta = {2:f}", passes, func, theta);
+                Trace.WriteLine($"After {passes:d} passes, func={func:e}, theta = {theta:f}");
             }
 
             return theta;

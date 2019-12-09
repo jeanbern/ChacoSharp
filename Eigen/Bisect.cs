@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Eigen.SturmCount;
 using static ChacoSharp.Eigen.CkSturmCount;
@@ -43,8 +44,8 @@ public static int bisect(double *alpha,        /* vector of Lanczos scalars */
   /* If space has been allocated for a copy of the ritz values, assume
      we are to check the Sturm sequence counts directly using ql(). */
   if (ritz_sav != null) {
-    Console.WriteLine("\nAnorm {0:g} j {1:d} nevals_left {2:d}", Anorm, j, nevals_left);
-    Console.WriteLine("step              x1                 x2         x1cnt  ck  x2cnt  ck  brack   ck   x2-x1");
+    Trace.WriteLine($"\nAnorm {Anorm:g} j {j:d} nevals_left {nevals_left:d}");
+    Trace.WriteLine($"step              x1                 x2         x1cnt  ck  x2cnt  ck  brack   ck   x2-x1");
   }
 
   /* Initialize portion of ritz we will use (use max double so scanmin will work
@@ -89,7 +90,7 @@ public static int bisect(double *alpha,        /* vector of Lanczos scalars */
       if (ritz_sav != null) {
         diff = x2 - x1;
         cksturmcnt(ritz_sav, 1, j, x1, x2, &x1ck, &x2ck, &numck);
-        Console.WriteLine("{0:d} {1:f} {2:f}   {3:d}   {4:d}  {5:d}   {6:d}   {7:d}   {8:d}   {9:g}", ii++, x1, x2, x1cnt,x1ck, x2cnt, x2ck, numbracketed, numck, diff);
+        Trace.WriteLine($"{ii++:d} {x1:f} {x2:f}   {x1cnt:d}   {x1ck:d}  {x2cnt:d}   {x2ck:d}   {numbracketed:d}   {numck:d}   {diff:g}");
         if (x1cnt != x1ck || x2cnt != x2ck || numbracketed != numck) {
             Console.WriteLine("**");
         }
@@ -100,14 +101,14 @@ public static int bisect(double *alpha,        /* vector of Lanczos scalars */
     }
     ritz[index] = 0.5 * (x1 + x2);
     if (ritz_sav != null) {
-        Console.WriteLine("Ritzval #{0:d}:", index);
-      Console.WriteLine("            bisection {0:f}", ritz[index]);
-      Console.WriteLine("                   ql {0:f}", ritz_sav[index]);
-      Console.WriteLine("           difference {0:f}", ritz[index] - ritz_sav[index]);
-      Console.WriteLine("---------------------------------------------------");
+        Trace.WriteLine($"Ritzval #{index:d}:");
+        Trace.WriteLine($"            bisection {ritz[index]:f}");
+        Trace.WriteLine($"                   ql {ritz_sav[index]:f}");
+        Trace.WriteLine($"           difference {ritz[index] - ritz_sav[index]:f}");
+        Trace.WriteLine("---------------------------------------------------");
     }
     if (DEBUG_EVECS > 2) {
-      Console.WriteLine("    index {0:d}, bisection steps {1:d}, root {2:f}", index, steps, ritz[index]);
+        Trace.WriteLine($"    index {index:d}, bisection steps {steps:d}, root {ritz[index]:f}");
     }
     tot_steps += steps;
   }
@@ -144,12 +145,12 @@ public static int bisect(double *alpha,        /* vector of Lanczos scalars */
       if (ritz_sav != null) {
         diff = x2 - x1;
         cksturmcnt(ritz_sav, 1, j, x1, x2, &x1ck, &x2ck, &numck);
-        Console.WriteLine("{0:d} {1:f} {2:f}   {3:d}   {4:d}  {5:d}   {6:d}   {7:d}   {8:d}   {9:g}", ii++, x1, x2, x1cnt,x1ck, x2cnt, x2ck, numbracketed, numck, diff);
+        Trace.WriteLine($"{ii++:d} {x1:f} {x2:f}   {x1cnt:d}   {x1ck:d}  {x2cnt:d}   {x2ck:d}   {numbracketed:d}   {numck:d}   {diff:g}");
         if (x1cnt != x1ck || x2cnt != x2ck || numbracketed != numck) {
-            Console.WriteLine("**");
+            Trace.WriteLine("**");
         }
         else {
-            Console.WriteLine("");
+            Trace.WriteLine("");
         }
       }
     }
@@ -162,12 +163,12 @@ public static int bisect(double *alpha,        /* vector of Lanczos scalars */
         Console.WriteLine("---------------------------------------------------");
     }
     if (DEBUG_EVECS > 2) {
-        Console.WriteLine("    index {0:d}, bisection steps {1:d}, root {2:f}", index, steps, ritz[index]);
+        Trace.WriteLine($"    index {index:d}, bisection steps {steps:d}, root {ritz[index]:f}");
     }
     tot_steps += steps;
   }
   if (DEBUG_EVECS > 2) {
-      Console.WriteLine("  Total number of bisection steps {0:d}.", tot_steps);
+      Trace.WriteLine($"  Total number of bisection steps {tot_steps:d}.");
   }
 
   return (0); /* ... things seem ok. */

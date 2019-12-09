@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Assignment.AssignFunc;
 using static ChacoSharp.Assignment.MergeAssignments;
@@ -92,7 +93,6 @@ namespace ChacoSharp.SubMain
 
             double* vwsqrt; /* sqrt of vertex weights (length nvtxs+1) */
             double time, time1; /* timing variables */
-            string graphname;
             string geomname; /* names of input files */
             string inassignname; /* name of assignment input file */
             int old_nsqrts; /* old value of NSQRTS */
@@ -104,7 +104,7 @@ namespace ChacoSharp.SubMain
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering submain>");
+                Trace.WriteLine("<Entering submain>");
             }
 
             /* First check all the input for consistency. */
@@ -140,7 +140,6 @@ namespace ChacoSharp.SubMain
                     return false;
                 }
             }
-            graphname = Graph_File_Name;
             geomname = Geometry_File_Name;
             inassignname = Assign_In_File_Name;
 
@@ -153,8 +152,8 @@ namespace ChacoSharp.SubMain
 
             if (PRINT_HEADERS)
             {
-                Console.WriteLine("\n                    Chaco 2.0");
-                Console.WriteLine("          Sandia National Laboratories\n");
+                Trace.WriteLine("\n                    Chaco 2.0");
+                Trace.WriteLine("          Sandia National Laboratories\n");
             }
 
             if (CHECK_INPUT)
@@ -162,7 +161,7 @@ namespace ChacoSharp.SubMain
                 /* Check the input for inconsistencies. */
                 time1 = seconds();
 
-                flag = check_input(graph, nvtxs, nedges, igeom, coords, graphname, assignment, goal,
+                flag = check_input(graph, nvtxs, nedges, igeom, coords, assignment, goal,
                     architecture, ndims_tot, mesh_dims, global_method, localPartitioningStrategy, rqi_flag,
                     &vmax, ndims, eigtol);
 
@@ -170,21 +169,21 @@ namespace ChacoSharp.SubMain
 
                 if (flag)
                 {
-                    Console.WriteLine("ERROR IN INPUT.");
+                    Trace.WriteLine("ERROR IN INPUT.");
                     return (true);
                 }
             }
 
             if (ECHO_INPUT_PARAMETERS)
             {
-                reflect_input(nvtxs, nedges, igeom, graphname, geomname, inassignname,
+                reflect_input(nvtxs, nedges, igeom, geomname, inassignname,
                     architecture, ndims_tot, mesh_dims, global_method, localPartitioningStrategy,
                     rqi_flag, vmax, ndims, eigtol, seed);
             }
 
             if (PRINT_HEADERS)
             {
-                Console.WriteLine("\n\nStarting to partition ...\n");
+                Trace.WriteLine("\n\nStarting to partition ...\n");
             }
 
             time = seconds();
@@ -194,9 +193,9 @@ namespace ChacoSharp.SubMain
 
             if (DEBUG_MACH_PARAMS)
             {
-                Console.WriteLine("Machine parameters:");
-                Console.WriteLine("  DOUBLE_EPSILON = {0:e}", DOUBLE_EPSILON);
-                Console.WriteLine("  DOUBLE_MAX = {0:e}", double.MaxValue);
+                Trace.WriteLine("Machine parameters:");
+                Trace.WriteLine($"  DOUBLE_EPSILON = {DOUBLE_EPSILON:e}");
+                Trace.WriteLine($"  DOUBLE_MAX = {double.MaxValue:e}");
             }
 
             nsets = (1 << ndims);
@@ -210,7 +209,7 @@ namespace ChacoSharp.SubMain
             SQRTS = (double*) Marshal.AllocHGlobal((NSQRTS + 1) * sizeof(double));
             if (SQRTS == null)
             {
-                Console.WriteLine("ERROR: No space to allocate sqrts");
+                Trace.WriteLine("ERROR: No space to allocate sqrts");
                 return (true);
             }
 
@@ -224,7 +223,7 @@ namespace ChacoSharp.SubMain
                 vwsqrt = (double*) Marshal.AllocHGlobal((nvtxs + 1) * sizeof(double));
                 if (vwsqrt == null)
                 {
-                    Console.WriteLine("ERROR: No space to allocate vwsqrt");
+                    Trace.WriteLine("ERROR: No space to allocate vwsqrt");
                     Marshal.FreeHGlobal((IntPtr) SQRTS);
                     NSQRTS = old_nsqrts;
                     return (true);
@@ -317,7 +316,7 @@ namespace ChacoSharp.SubMain
                     /* Reduce cuts w/ KL? */
                     if (DEBUG_REFINE_PART)
                     {
-                        Console.WriteLine("\n\nBefore pass {0:d} to refine partition:", i);
+                        Trace.WriteLine($"\n\nBefore pass {i:d} to refine partition:");
                         countup(graph, nvtxs, assignment, ndims, architecture, ndims_tot, mesh_dims, useEdgeWeights);
                     }
 
@@ -332,7 +331,7 @@ namespace ChacoSharp.SubMain
                 {
                     if (DEBUG_INTERNAL)
                     {
-                        Console.WriteLine("\n\nBefore increasing internal vertices:");
+                        Trace.WriteLine("\n\nBefore increasing internal vertices:");
                         countup(graph, nvtxs, assignment, ndims, architecture, ndims_tot, mesh_dims, useEdgeWeights);
                     }
 
@@ -347,8 +346,8 @@ namespace ChacoSharp.SubMain
                     /* Force subdomains to be connected */
                     int res = 0;
                     connect_enforce(graph, nvtxs, useEdgeWeights, assignment, goal, nsets_tot, &i, &res);
-                    Console.WriteLine("\nConnectivity enforcement moved {0:d} vertices total", i);
-                    Console.WriteLine("                         largest moved subset = {0:d}\n", res);
+                    Trace.WriteLine($"\nConnectivity enforcement moved {i:d} vertices total");
+                    Trace.WriteLine($"                         largest moved subset = {res:d}\n");
                 }
             }
 
@@ -359,7 +358,7 @@ namespace ChacoSharp.SubMain
                     /* Improve the mapping to processors? */
                     if (DEBUG_REFINE_MAP)
                     {
-                        Console.WriteLine("\n\nBefore refining mapping to processors:");
+                        Trace.WriteLine("\n\nBefore refining mapping to processors:");
                         countup(graph, nvtxs, assignment, ndims, architecture, ndims_tot, mesh_dims, useEdgeWeights);
                     }
 
@@ -375,7 +374,7 @@ namespace ChacoSharp.SubMain
                 {
                     if (PRINT_HEADERS)
                     {
-                        Console.WriteLine("\n\n                     Partitioning Results");
+                        Trace.WriteLine("\n\n                     Partitioning Results");
                     }
 
                     countup(graph, nvtxs, assignment, ndims, architecture, ndims_tot, mesh_dims, useEdgeWeights);
@@ -632,10 +631,10 @@ namespace ChacoSharp.SubMain
                 maxbdy = minbdy = 0;
                 maxneighbors = minneighbors = 0;
 
-                Console.WriteLine("\nAfter level {0:d}  (nsets = {1:d}):", level, nsets);
+                Trace.WriteLine($"\nAfter level {level:d}  (nsets = {nsets:d}):");
                 if (PRINT_GRAPH_PARTITION_METRICS_DETAILED)
                 {
-                    Console.WriteLine("    set    size      cuts       hops   bndy_vtxs    adj_sets");
+                    Trace.WriteLine("    set    size      cuts       hops   bndy_vtxs    adj_sets");
                 }
 
                 int bdyvtxs = 0; /* sum of onbdy values for a set */
@@ -737,7 +736,7 @@ namespace ChacoSharp.SubMain
 
                     if (PRINT_GRAPH_PARTITION_METRICS_DETAILED)
                     {
-                        Console.WriteLine(" {0:d}    {1:d}    {2:g}     {3:g}   {4:d}      {5:d}", set, setsize[set], cutsize[set], hopsize[set], bdyvtxs, neighbor_sets);
+                        Trace.WriteLine($" {set:d}    {setsize[set]:d}    {cutsize[set]:g}     {hopsize[set]:g}   {bdyvtxs:d}      {neighbor_sets:d}");
                     }
 
                     if (cutsize[set] > maxcuts)
@@ -789,16 +788,16 @@ namespace ChacoSharp.SubMain
                 ncuts /= 2;
                 nhops /= 2;
 
-                Console.WriteLine("\n");
-                Console.WriteLine("                            Total      Max/Set      Min/Set\n");
-                Console.WriteLine("                            -----      -------      -------\n");
-                Console.WriteLine("Set Size:             {0:d}  {1:d}  {2:d}", tot_size, max_size, min_size);
-                Console.WriteLine("Edge Cuts:            {0:g}  {1:g}  {2:g}", ncuts, maxcuts, mincuts);
-                Console.WriteLine("Hypercube Hops:       {0:g}  {1:g}  {2:g}", nhops, maxhops, minhops);
-                Console.WriteLine("Boundary Vertices:    {0:g}  {1:g}  {2:g}", total_bdyvtxs, maxbdy, minbdy);
-                Console.WriteLine("Boundary Vertex Hops: {0:g}  {1:g}  {2:g}", bdyvtx_hops_tot, bdyvtx_hops_max, bdyvtx_hops_min);
-                Console.WriteLine("Adjacent Sets:        {0:d}  {1:d}  {2:d}", total_neighbors, maxneighbors, minneighbors);
-                Console.WriteLine("Internal Vertices:    {0:d}  {1:d}  {2:d}\n", total_internal, max_internal, min_internal);
+                Trace.WriteLine("\n");
+                Trace.WriteLine("                            Total      Max/Set      Min/Set\n");
+                Trace.WriteLine("                            -----      -------      -------\n");
+                Trace.WriteLine($"Set Size:             {tot_size:d}  {max_size:d}  {min_size:d}");
+                Trace.WriteLine($"Edge Cuts:            {ncuts:g}  {maxcuts:g}  {mincuts:g}");
+                Trace.WriteLine($"Hypercube Hops:       {nhops:g}  {maxhops:g}  {minhops:g}");
+                Trace.WriteLine($"Boundary Vertices:    {total_bdyvtxs:g}  {maxbdy:g}  {minbdy:g}");
+                Trace.WriteLine($"Boundary Vertex Hops: {bdyvtx_hops_tot:g}  {bdyvtx_hops_max:g}  {bdyvtx_hops_min:g}");
+                Trace.WriteLine($"Adjacent Sets:        {total_neighbors:d}  {maxneighbors:d}  {minneighbors:d}");
+                Trace.WriteLine($"Internal Vertices:    {total_internal:d}  {max_internal:d}  {min_internal:d}\n");
 
                 if (k == ndims_tot)
                 {
@@ -977,11 +976,11 @@ namespace ChacoSharp.SubMain
             total_internal = 0;
             min_internal = max_size;
             max_internal = 0;
-            Console.WriteLine("\nAfter full partitioning  (nsets = {0:d})", nsets);
+            Trace.WriteLine($"\nAfter full partitioning  (nsets = {nsets:d})");
 
             if (PRINT_GRAPH_PARTITION_METRICS_DETAILED)
             {
-                Console.WriteLine("    set    size      cuts       hops   bndy_vtxs    adj_sets");
+                Trace.WriteLine("    set    size      cuts       hops   bndy_vtxs    adj_sets");
             }
 
             for (set = 0; set < nsets; set++)
@@ -1077,7 +1076,7 @@ namespace ChacoSharp.SubMain
 
                 if (PRINT_GRAPH_PARTITION_METRICS_DETAILED)
                 {
-                    Console.WriteLine(" {0:d}    {1:d}    {2:g}     {3:g}   {4:g}      {5:d}", set, setsize[set], cutsize[set], hopsize[set], bdyvtxs, neighbor_sets);
+                    Trace.WriteLine($" {set:d}    {setsize[set]:d}    {cutsize[set]:g}     {hopsize[set]:g}   {bdyvtxs:g}      {neighbor_sets:d}");
                 }
 
                 if (cutsize[set] > maxcuts)
@@ -1128,16 +1127,16 @@ namespace ChacoSharp.SubMain
 
             ncuts /= 2;
             nhops /= 2;
-            Console.WriteLine();
-            Console.WriteLine("                            Total      Max/Set      Min/Set");
-            Console.WriteLine("                            -----      -------      -------");
-            Console.WriteLine("Set Size:             {0:d}  {1:d}  {2:d}", tot_size, max_size, min_size);
-            Console.WriteLine("Edge Cuts:            {0:g}  {1:g}  {2:g}", ncuts, maxcuts, mincuts);
-            Console.WriteLine("Mesh Hops:            {0:g}  {1:g}  {2:g}", nhops, maxhops, minhops);
-            Console.WriteLine("Boundary Vertices:    {0:g}  {1:g}  {2:g}", total_bdyvtxs, maxbdy, minbdy);
-            Console.WriteLine("Boundary Vertex Hops: {0:g}  {1:g}  {2:g}", bdyvtx_hops_tot, bdyvtx_hops_max, bdyvtx_hops_min);
-            Console.WriteLine("Adjacent Sets:        {0:d}  {1:d}  {2:d}", total_neighbors, maxneighbors, minneighbors);
-            Console.WriteLine("Internal Vertices:    {0:d}  {1:d}  {2:d}\n", total_internal, max_internal, min_internal);
+            Trace.WriteLine("");
+            Trace.WriteLine("                            Total      Max/Set      Min/Set");
+            Trace.WriteLine("                            -----      -------      -------");
+            Trace.WriteLine($"Set Size:             {tot_size:d}  {max_size:d}  {min_size:d}");
+            Trace.WriteLine($"Edge Cuts:            {ncuts:g}  {maxcuts:g}  {mincuts:g}");
+            Trace.WriteLine($"Mesh Hops:            {nhops:g}  {maxhops:g}  {minhops:g}");
+            Trace.WriteLine($"Boundary Vertices:    {total_bdyvtxs:g}  {maxbdy:g}  {minbdy:g}");
+            Trace.WriteLine($"Boundary Vertex Hops: {bdyvtx_hops_tot:g}  {bdyvtx_hops_max:g}  {bdyvtx_hops_min:g}");
+            Trace.WriteLine($"Adjacent Sets:        {total_neighbors:d}  {maxneighbors:d}  {minneighbors:d}");
+            Trace.WriteLine($"Internal Vertices:    {total_internal:d}  {max_internal:d}  {min_internal:d}\n");
 
             Marshal.FreeHGlobal((IntPtr) cutsize);
             Marshal.FreeHGlobal((IntPtr) hopsize);
@@ -1236,7 +1235,7 @@ namespace ChacoSharp.SubMain
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering balance>");
+                Trace.WriteLine("<Entering balance>");
             }
 
             if (global_method != PartitioningStrategy.ReadFromFile)
@@ -1507,22 +1506,22 @@ namespace ChacoSharp.SubMain
 
                 if (DEBUG_TRACE)
                 {
-                    Console.WriteLine("About to call divide with nvtxs = %d, nedges = %d, ", subnvtxs, subnedges);
+                    Trace.WriteLine(string.Format("About to call divide with nvtxs = %d, nedges = %d, ", subnvtxs, subnedges));
                     if (architecture != 0)
                     {
-                        Console.WriteLine("ndims = {0:d}", set->ndims);
+                        Trace.WriteLine($"ndims = {set->ndims:d}");
                     }
                     else if (architecture == 1)
                     {
-                        Console.WriteLine("mesh = {0:d}", set->span[0]);
+                        Trace.WriteLine($"mesh = {set->span[0]:d}");
                     }
                     else if (architecture == 2)
                     {
-                        Console.WriteLine("mesh = {0:d}x{1:d}", set->span[0], set->span[1]);
+                        Trace.WriteLine($"mesh = {set->span[0]:d}x{set->span[1]:d}");
                     }
                     else if (architecture == 3)
                     {
-                        Console.WriteLine("mesh = {0:d}x{1:d}x{2:d}", set->span[0], set->span[1], set->span[2]);
+                        Trace.WriteLine($"mesh = {set->span[0]:d}x{set->span[1]:d}x{set->span[2]:d}");
                     }
                 }
 
@@ -1719,7 +1718,7 @@ namespace ChacoSharp.SubMain
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering divide, nvtxs = {0:d}, nedges = {1:d}>", nvtxs, nedges);
+                Trace.WriteLine($"<Entering divide, nvtxs = {nvtxs:d}, nedges = {nedges:d}>");
             }
 
             if (nvtxs <= 0)
@@ -1848,7 +1847,7 @@ namespace ChacoSharp.SubMain
                         count_weights(graph, nvtxs, assignment, nsets + 1, weights, useVertexWeights);
                         if (DEBUG_KL != DebugFlagKL.NoDebugging)
                         {
-                            Console.WriteLine("After KL, before bpm_improve");
+                            Trace.WriteLine("After KL, before bpm_improve");
                             countup_vtx_sep(graph, nvtxs, assignment);
                         }
 
@@ -1876,13 +1875,13 @@ namespace ChacoSharp.SubMain
                     make_connected(graph, nvtxs, &nedges, mark, active, &cdata, useEdgeWeights);
                     if (DEBUG_CONNECTED)
                     {
-                        Console.WriteLine("Enforcing connectivity");
+                        Trace.WriteLine("Enforcing connectivity");
                         print_connected(cdata);
                     }
                 }
                 else if (DEBUG_CONNECTED)
                 {
-                    Console.WriteLine("Not enforcing connectivity");
+                    Trace.WriteLine("Not enforcing connectivity");
                 }
 
                 maxdeg = find_maxdeg(graph, nvtxs, useEdgeWeights, (float*) null);
@@ -1986,7 +1985,7 @@ namespace ChacoSharp.SubMain
                         count_weights(graph, nvtxs, assignment, nsets + 1, weights, (vwgt_max != 1));
                         if (DEBUG_KL != DebugFlagKL.NoDebugging)
                         {
-                            Console.WriteLine("After KL, before bpm_improve");
+                            Trace.WriteLine("After KL, before bpm_improve");
                             countup_vtx_sep(graph, nvtxs, assignment);
                         }
 
@@ -2000,7 +1999,7 @@ namespace ChacoSharp.SubMain
                 count_weights(graph, nvtxs, assignment, nsets + 1, weights, (vwgt_max != 1));
                 if (DEBUG_KL != DebugFlagKL.NoDebugging)
                 {
-                    Console.WriteLine("Before bpm_improve");
+                    Trace.WriteLine("Before bpm_improve");
                     countup_vtx_sep(graph, nvtxs, assignment);
                 }
 

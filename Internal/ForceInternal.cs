@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Utilities.MergeSort;
 using static ChacoSharp.StaticConstants;
@@ -52,7 +52,7 @@ namespace ChacoSharp.Internal
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering force_internal>");
+                Trace.WriteLine("<Entering force_internal>");
             }
 
             indices = (int*) Marshal.AllocHGlobal(nsets_tot * sizeof(int));
@@ -185,7 +185,7 @@ namespace ChacoSharp.Internal
 
                     if (DEBUG_INTERNAL)
                     {
-                        Console.WriteLine("Before iteration {0:d}, nlocked = {1:d}, int[{2:d}] = {3:d}", niter, nlocked, set, prev->val);
+                        Trace.WriteLine($"Before iteration {niter:d}, nlocked = {nlocked:d}, int[{set:d}] = {prev->val:d}");
                     }
 
                     if (DEBUG_INTERNAL)
@@ -212,8 +212,8 @@ namespace ChacoSharp.Internal
 
             if (error)
             {
-                Console.WriteLine("\nWARNING: No space to increase internal vertices.");
-                Console.WriteLine("         NO INTERNAL VERTEX INCREASE PERFORMED.");
+                Trace.WriteLine("\nWARNING: No space to increase internal vertices.");
+                Trace.WriteLine("         NO INTERNAL VERTEX INCREASE PERFORMED.");
             }
 
             Marshal.FreeHGlobal((IntPtr) internal_vwgt);
@@ -260,12 +260,12 @@ namespace ChacoSharp.Internal
                 val = ptr->val;
                 if (val < old_val)
                 {
-                    Console.WriteLine("int_list out of order, k={0:d}, set = {1:d}, old_val={2:d}, val = {3:d}", k, set, old_val, val);
+                    Trace.WriteLine($"int_list out of order, k={k:d}, set = {set:d}, old_val={old_val:d}, val = {val:d}");
                 }
 
                 if (ptr->prev != old_ptr)
                 {
-                    Console.WriteLine(" int_list back link screwed up, set={0:d}, k={1:d}, old_ptr={2:ld}, ptr->prev = {3:ld}", set, k, (long) old_ptr, (long) ptr->prev);
+                    Trace.WriteLine($" int_list back link screwed up, set={set:d}, k={k:d}, old_ptr={(long) old_ptr:ld}, ptr->prev = {(long) ptr->prev:ld}");
                 }
 
                 old_ptr = ptr;
@@ -280,8 +280,7 @@ namespace ChacoSharp.Internal
                     vwgt_sum += graph[vtx]->vwgt;
                     if (ptr2->prev != old_ptr2)
                     {
-                        Console.WriteLine(" set_list back link screwed up, set={0:d}, k={1:d}, old_ptr2={2:ld}, ptr2->prev = {3:ld}",
-                            set, k, (long) old_ptr2, (long) ptr2->prev);
+                        Trace.WriteLine($" set_list back link screwed up, set={set:d}, k={k:d}, old_ptr2={(long) old_ptr2:ld}, ptr2->prev = {(long) ptr2->prev:ld}");
                     }
 
                     old_ptr2 = ptr2;
@@ -289,7 +288,7 @@ namespace ChacoSharp.Internal
                     ++nseen;
                     if (assign[vtx] != set)
                     {
-                        Console.WriteLine("assign[{0:d}] = {1:d}, but in set_list[{2:d}]", vtx, assign[vtx], set);
+                        Trace.WriteLine($"assign[{vtx:d}] = {assign[vtx]:d}, but in set_list[{set:d}]");
                     }
 
                     isVectorInternal = true;
@@ -307,12 +306,12 @@ namespace ChacoSharp.Internal
 
                 if (sum != val)
                 {
-                    Console.WriteLine("set = {0:d}, val = {1:d}, but I compute internal = {2:d}", set, val, sum);
+                    Trace.WriteLine($"set = {set:d}, val = {val:d}, but I compute internal = {sum:d}");
                 }
 
                 if (vwgt_sum != total_vwgt[set])
                 {
-                    Console.WriteLine(" vwgt_sum = {0:d}, but total_vwgt[{1:d}] = {2:d}", vwgt_sum, set, total_vwgt[set]);
+                    Trace.WriteLine($" vwgt_sum = {vwgt_sum:d}, but total_vwgt[{set:d}] = {total_vwgt[set]:d}");
                 }
 
                 k++;
@@ -320,12 +319,12 @@ namespace ChacoSharp.Internal
 
             if (k != nsets_tot)
             {
-                Console.WriteLine(" Only {0:d} sets in int_sets list, but nsets_tot = {1:d}", k, nsets_tot);
+                Trace.WriteLine($" Only {k:d} sets in int_sets list, but nsets_tot = {nsets_tot:d}");
             }
 
             if (nseen != nvtxs)
             {
-                Console.WriteLine(" Only {0:d} vertices found in int_sets lists, but nvtxs = {1:d}", nseen, nvtxs);
+                Trace.WriteLine($" Only {nseen:d} vertices found in int_sets lists, but nvtxs = {nvtxs:d}");
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Coarsening.MakeCoords;
@@ -240,7 +241,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COARSEN)
             {
-                Console.WriteLine(" Coarse graph has {0:D} vertices and {1:D} edges", cnvtxs, cnedges);
+                Trace.WriteLine($" Coarse graph has {cnvtxs:D} vertices and {cnedges:D} edges");
             }
 
             make_cgraph_time += seconds() - time;

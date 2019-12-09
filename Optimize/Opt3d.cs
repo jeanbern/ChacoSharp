@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0101 // Array allocation for params parameter
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Optimize.Determinant;
 using static ChacoSharp.Optimize.Func3d;
@@ -280,7 +281,7 @@ namespace ChacoSharp.Optimize
 
                 if (DEBUG_OPTIMIZE)
                 {
-                    Console.WriteLine("On try {0:d}, After {1:d} ({2:d}) passes, funcf={3:e}, funcc={4:e} ({5:f}, {6:f}, {7:f})", ntries, totalIterations, inner1, funcf, funcc, angularVariables[0], angularVariables[1], angularVariables[2]);
+                    Trace.WriteLine($"On try {ntries:d}, After {totalIterations:d} ({inner1:d}) passes, funcf={funcf:e}, funcc={funcc:e} ({angularVariables[0]:f}, {angularVariables[1]:f}, {angularVariables[2]:f})");
                 }
 
                 if (ntries == 1 || funcf < currentBestValue)

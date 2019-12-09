@@ -1,5 +1,4 @@
-﻿using System;
-using static ChacoSharp.StaticConstants;
+﻿using System.Diagnostics;
 
 namespace ChacoSharp.Graph
 {
@@ -15,10 +14,7 @@ namespace ChacoSharp.Graph
         /// <returns>The maximum weighted degree of a vertex.</returns>
         public static double find_maxdeg(vtx_data** graph, int nvtxs, bool useEdgeWeights, float* pmax_ewgt)
         {
-            if (FullTrace)
-            {
-                Console.WriteLine($"<Entering {nameof(find_maxdeg)}>");
-            }
+            Trace.WriteLine($"<Entering {nameof(find_maxdeg)}>");
 
             /* Find the maximum weighted degree of a vertex. */
             double maxdeg = 0;

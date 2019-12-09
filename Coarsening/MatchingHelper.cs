@@ -1,6 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
-using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 // ReSharper disable InvertIf
 
@@ -30,7 +30,7 @@ n_left+n_right nodes, where node 'i' is adjacent to nodes
 
             if (DEBUG_COVER != 0)
             {
-                Console.WriteLine("-> Entering bpcover, nleft = {0:d}, nright = {1:d}, 2*nedges = {2:d}", leftVertexCount, rightVertexCount, pointers[leftVertexCount + rightVertexCount] - pointers[0]);
+                Trace.WriteLine($"-> Entering bpcover, nleft = {leftVertexCount:d}, nright = {rightVertexCount:d}, 2*nedges = {pointers[leftVertexCount + rightVertexCount] - pointers[0]:d}");
             }
 
             var matching = new int[leftVertexCount + rightVertexCount];
@@ -265,7 +265,7 @@ n_left+n_right nodes, where node 'i' is adjacent to nodes
                         var neighbor = indices[j];
                         if (!marked[neighbor])
                         {
-                            Console.WriteLine("Edge ({0:d}, {1:d}) not covered", i, neighbor);
+                            Trace.WriteLine("Edge ({i:d}, {neighbor:d}) not covered");
                         }
                     }
                 }
@@ -274,14 +274,14 @@ n_left+n_right nodes, where node 'i' is adjacent to nodes
             var matchSize = match_size(matching, n_left);
             if (sep_size != matchSize)
             {
-                Console.WriteLine("ERROR: sep_size = {0:d}, but match_size = {1:d}", sep_size, matchSize);
+                Trace.WriteLine($"ERROR: sep_size = {sep_size:d}, but match_size = {matchSize:d}");
             }
 
             for (var i = 0; i < n_left + n_right; i++)
             {
                 if (matching[i] != -1 && matching[matching[i]] != i)
                 {
-                    Console.WriteLine("ERROR: matching[{0:d}] = {1:d}, but matching[{2:d}] = {3:d}", i, matching[i], matching[i], matching[matching[i]]);
+                    Trace.WriteLine($"ERROR: matching[{i:d}] = {matching[i]:d}, but matching[{matching[i]:d}] = {matching[matching[i]]:d}");
                 }
             }
         }

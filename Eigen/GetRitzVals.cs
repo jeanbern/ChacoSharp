@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.MkVec;
 using static ChacoSharp.Utilities.CpVec;
@@ -70,7 +71,7 @@ namespace ChacoSharp.Eigen
             {
                 if (DEBUG_EVECS > 2)
                 {
-                    Console.WriteLine("  tridiagonal solver: bisection");
+                    Trace.WriteLine("  tridiagonal solver: bisection");
                 }
 
                 /* Set local_debug = TRUE for a table checking bisection against QL. */
@@ -101,7 +102,7 @@ namespace ChacoSharp.Eigen
             {
                 if (DEBUG_EVECS > 2)
                 {
-                    Console.WriteLine("  tridiagonal solver: ql");
+                    Trace.WriteLine("  tridiagonal solver: ql");
                 }
 
                 cpvec(ritz, 1, j, alpha);
@@ -114,7 +115,7 @@ namespace ChacoSharp.Eigen
             {
                 if (DEBUG_EVECS > 0 || WARNING_EVECS > 0)
                 {
-                    Console.WriteLine("WARNING: Sturm bisection of T failed; switching to QL.");
+                    Trace.WriteLine("WARNING: Sturm bisection of T failed; switching to QL.");
                 }
 
                 if (DEBUG_EVECS > 1 || WARNING_EVECS > 1)
@@ -126,7 +127,7 @@ namespace ChacoSharp.Eigen
 
                     if (bisect_flag == 2)
                     {
-                        Console.WriteLine("         - maximum number of bisection steps reached");
+                        Trace.WriteLine("         - maximum number of bisection steps reached");
                     }
                 }
 
@@ -140,7 +141,7 @@ namespace ChacoSharp.Eigen
             {
                 if (DEBUG_EVECS > 0 || WARNING_EVECS > 0)
                 {
-                    Console.WriteLine("WARNING: QL failed for T; switching to Sturm bisection.");
+                    Trace.WriteLine("WARNING: QL failed for T; switching to Sturm bisection.");
                 }
 
                 bisect_flag = bisect(alpha, beta, j, Anorm, workj, ritz, nvals_left, nvals_right, bisection_tol,

@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.Randomize;
@@ -59,7 +60,7 @@ namespace ChacoSharp.Coarsening
 
             if (DEBUG_COARSEN)
             {
-                Console.WriteLine("Number of matching edges = {0:D}", nmerged);
+                Trace.WriteLine($"Number of matching edges = {nmerged:D}");
             }
 
             return (nmerged);

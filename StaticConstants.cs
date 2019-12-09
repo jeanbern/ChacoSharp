@@ -1,38 +1,47 @@
 ﻿// ReSharper disable InconsistentNaming
-using System;
-using ChacoSharp.Coarsening;
 
 #pragma warning disable S2223 // Non-constant static fields should not be visible
 #pragma warning disable S1104 // Fields should not have public accessibility
+#pragma warning disable RCS1057 // Add empty line between declarations.
 namespace ChacoSharp
 {
     public static unsafe class StaticConstants
     {
-        /// <summary>
-        /// Just generate spectral ordering?
-        /// </summary>
+        /// <summary>Just generate spectral ordering?</summary>
         public const bool SEQUENCE = true;
 
-        public const bool MAKE_VWGTS = false; /* Force vertex weights to be degrees+1 ? */
+        /// <summary>Force vertex weights to be degrees+1 ?</summary>
+        public const bool MAKE_VWGTS = false;
 
-        public const int LANCZOS_CONVERGENCE_MODE = 0; /* residual or partition mode? */
-        public const int RQI_CONVERGENCE_MODE = 0; /* residual or partition mode? */
+        /// <summary>eigen-tolerance convergence criteria</summary>
+        public const double EIGEN_TOLERANCE = 0.0001;
+        /// <summary>resid tol for T evec computation</summary>
+        public static double SRESTOL = -1.0d;
 
-        public const double EIGEN_TOLERANCE = 0.0001; /* eigen-tolerance convergence criteria */
-        public const LanczosType LANCZOS_TYPE = LanczosType.SelectiveOrthogonalization; /* type of Lanczos to use */
-        public const int LANCZOS_SO_INTERVAL = 10; /* interval between orthogonalizations */
-        public const int LANCZOS_SO_PRECISION = 2; /* controls precision in eigen calc. */
-        public static double SRESTOL = -1.0d; /* resid tol for T evec computation */
-        public static int LANCZOS_MAXITNS = -1; /* maximum Lanczos iterations allowed */
+        /// <summary>residual or partition mode?</summary>
+        public const int LANCZOS_CONVERGENCE_MODE = 0;
+        /// <summary>residual or partition mode?</summary>
+        public const int RQI_CONVERGENCE_MODE = 0;
+        /// <summary>type of Lanczos to use</summary>
+        public const LanczosType LANCZOS_TYPE = LanczosType.SelectiveOrthogonalization;
+        /// <summary>interval between orthogonalizations</summary>
+        public const int LANCZOS_SO_INTERVAL = 10;
+        /// <summary>controls precision in eigen calc.</summary>
+        public const int LANCZOS_SO_PRECISION = 2;
+        /// <summary>maximum Lanczos iterations allowed</summary>
+        public static int LANCZOS_MAXITNS = -1;
 
         //TODO: JB: Is this used in my path?
-        public static KernighanLinMetric KL_METRIC = KernighanLinMetric.Cuts; /* KL interset cost: 1=>cuts, 2=>hops */
+        /// <summary>KL interset cost: 1=>cuts, 2=>hops</summary>
+        public static KernighanLinMetric KL_METRIC = KernighanLinMetric.Cuts;
 
         //TODO: JB: Is this used in my path?
-        public const double BISECTION_SAFETY = 10; /* safety factor for bisection algorithm */
+        /// <summary>safety factor for bisection algorithm</summary>
+        public const double BISECTION_SAFETY = 10;
 
         //TODO: JB: Is this used in my path?
-        public const MatchingRoutine MATCH_TYPE = MatchingRoutine.maxmatch1; /* which matching routine to use */
+        /// <summary>which matching routine to use</summary>
+        public const MatchingRoutine MATCH_TYPE = MatchingRoutine.maxmatch1;
 
         public enum MatchingRoutine
         {
@@ -44,111 +53,180 @@ namespace ChacoSharp
             maxmatch9_minimumVertexDegree = 9
         }
 
-        public static int N_VTX_MOVES; /* total number of vertex moves */
-        public static int N_VTX_CHECKS; /* total number of moves contemplated */
-        public static int KL_MAX_PASS = -1; /* max KL passes; infinite if <= 0 */
-
-        public static int SRES_SWITCHES = 0; /* # switches to backup routine for computing s */
-        public static bool PERTURB = false; /* perturb matrix? */
-        public static int NSQRTS = 0; /* number of sqrts already computed */
-        public static double* SQRTS = null; /* values computed */
-
-        public const double WARNING_ORTHTOL = 2; /* Warning: modest loss of orthogonality */
-        public const double WARNING_MISTOL = 100; /* Warning: serious loss of orthogonality */
-
-        public const int OUTPUT_ASSIGN = 0; /* print assignment to a file? */
-        public const string Graph_File_Name = null; /* Input graph file name */
-        public const string Geometry_File_Name = null; /* Input coordinate file name */
-        public const string Assign_In_File_Name = null; /* Input assignment file name */
-
-        public const bool FREE_GRAPH = false; /* free graph data structure after reformat? */
-
-        public const int PROJECTION_AXIS = 0; /* axis to flatten geometry */
-
+        /// <summary>total number of vertex moves</summary>
+        public static int N_VTX_MOVES;
+        /// <summary>total number of moves contemplated</summary>
+        public static int N_VTX_CHECKS;
+        /// <summary>max KL passes; infinite if &lt;= 0</summary>
+        public static int KL_MAX_PASS = -1;
+        /// <summary># switches to backup routine for computing s</summary>
+        public static int SRES_SWITCHES = 0;
+        /// <summary>perturb matrix?</summary>
+        public static bool PERTURB = false;
+        /// <summary>number of sqrts already computed</summary>
+        public static int NSQRTS = 0;
+        /// <summary>values computed</summary>
+        public static double* SQRTS = null;
+        /// <summary>Warning: modest loss of orthogonality</summary>
+        public const double WARNING_ORTHTOL = 2;
+        /// <summary>Warning: serious loss of orthogonality</summary>
+        public const double WARNING_MISTOL = 100;
+        /// <summary>Input coordinate file name</summary>
+        public const string Geometry_File_Name = null;
+        /// <summary>Input assignment file name</summary>
+        public const string Assign_In_File_Name = null;
+        /// <summary>free graph data structure after reformat?</summary>
+        public const bool FREE_GRAPH = false;
+        /// <summary>axis to flatten geometry</summary>
+        public const int PROJECTION_AXIS = 0;
+        // TODO:
+        /// <summary></summary>
         public const bool VERTEX_SEPARATOR = false;
+        /// <summary>Merge indistinguishable vtxs first?</summary>
+        public const bool FLATTEN = false;
+        /// <summary>Use KLV as multilevel refinement?</summary>
+        public const bool COARSE_KLV = true;
+        /// <summary>Use vertex cover as ML refinement?</summary>
+        public const bool COARSE_BPM = false;
+        /// <summary>force KL invocation at bottom level?</summary>
+        public const bool COARSE_KL_BOTTOM = false;
+        /// <summary>start KL w/ vertices on boundary?</summary>
+        public const bool KL_ONLY_BNDY = false;
+        /// <summary>limit range of edge weights in multilevel-KL?</summary>
+        public const bool LIMIT_KL_EWGTS = false;
+        /// <summary>use randomness in Kernighan-Lin?</summary>
+        public const bool KL_RANDOM = false;
+        /// <summary>only resort vtxs affected by last pass?</summary>
+        public const bool KL_UNDO_LIST = false;
+        /// <summary>allowed fractional imbalance in KL</summary>
+        public const double KL_IMBALANCE = 0.0d;
+        /// <summary>if so, max allowed ewgt/nvtxs</summary>
+        public const double EWGT_RATIO_MAX = 0.0d;
+        /// <summary>number of unhelpful moves in a row allowed</summary>
+        public const int KL_BAD_MOVES = 0;
+        /// <summary>unhelpful passes before quitting KL</summary>
+        public const int KL_NTRIES_BAD = 0; /* #  */
+        /// <summary># levels between KL calls in uncoarsening</summary>
+        public const int COARSE_NLEVEL_KL = 0;
 
+        /// <summary>use greedy strategy to improve mapping?</summary>
+        public const bool REFINE_MAP = false;
+        /// <summary>use matching to reduce vertex separator?</summary>
+        public const bool VERTEX_COVER = false;
+        /// <summary>force subdomain connectivity at end?</summary>
+        public const bool CONNECTED_DOMAINS = false;
+        /// <summary>greedily increase internal vtxs?</summary>
+        public const bool INTERNAL_VERTICES = false;
+        /// <summary>number of calls to pairwise_refine to make</summary>
+        public const int REFINE_PARTITION = 0;
 
-        public const bool FLATTEN = false; /* Merge indistinguishable vtxs first? */
-        public const bool COARSE_KLV = true; /* Use KLV as multilevel refinement? */
-        public const bool COARSE_BPM = false; /* Use vertex cover as ML refinement? */
-        public const bool COARSE_KL_BOTTOM = false; /* force KL invocation at bottom level? */
-        public const bool KL_ONLY_BNDY = false; /* start KL w/ vertices on boundary? */
-        public const bool LIMIT_KL_EWGTS = false; /* limit range of edge weights in multilevel-KL? */
-        public const bool KL_RANDOM = false; /* use randomness in Kernighan-Lin? */
-        public const bool KL_UNDO_LIST = false; /* only resort vtxs affected by last pass? */
-        public const double KL_IMBALANCE = 0.0d; /* allowed fractional imbalance in KL */
-        public const double EWGT_RATIO_MAX = 0.0d; /* if so, max allowed ewgt/nvtxs */
-        public const int KL_BAD_MOVES = 0; /* number of unhelpful moves in a row allowed */
-        public const int KL_NTRIES_BAD = 0; /* # unhelpful passes before quitting KL */
-        public const int COARSE_NLEVEL_KL = 0; /* # levels between KL calls in uncoarsening */
+        /// <summary>number of local opts to find global min</summary>
+        public const int OPT3D_NTRIES = 0;
 
-        public const bool REFINE_MAP = false; /* use greedy strategy to improve mapping? */
-        public const bool VERTEX_COVER = false; /* use matching to reduce vertex separator? */
-        public const bool CONNECTED_DOMAINS = false; /* force subdomain connectivity at end? */
-        public const bool INTERNAL_VERTICES = false; /* greedily increase internal vtxs? */
-        public const int REFINE_PARTITION = 0; /* number of calls to pairwise_refine to make */
+        /// <summary>how to map from eigenvectors to partition</summary>
+        public const MappingType MAPPING_TYPE = MappingType.MinCost;
+        /// <summary>connect graph for spectral method?</summary>
+        public const bool MAKE_CONNECTED = false;
 
-        public const int OPT3D_NTRIES = 0; /* number of local opts to find global min */
+        /// <summary>use vertex weights while coarsening?</summary>
+        public const bool COARSEN_VWGTS = false;
+        /// <summary>use edge weights while coarsening?</summary>
+        public const bool COARSEN_EWGTS = false;
+        /// <summary>choose heavy edges in matching?</summary>
+        public const bool HEAVY_MATCH = false;
+        /// <summary>min vtx reduction for coarsening</summary>
+        public const double COARSEN_RATIO_MIN = 0.0d;
+        /// <summary>maximum perturbation</summary>
+        public const double PERTURB_MAX = 0.0d;
+        /// <summary>&lt; Most cuts allowed at one time</summary>
+        public const int MAXDIMS = 3;
+        /// <summary>&lt; 2^MAXDIMS</summary>
+        public const int MAXSETS = 8;
+        /// <summary>number of edges to perturb</summary>
+        public const int NPERTURB = 0;
+        /// <summary>do RQI this often in uncoarsenin</summary>
+        public const int COARSE_NLEVEL_RQI = 0; /* g */
 
-        public const MappingType MAPPING_TYPE = MappingType.MinCost; /* how to map from eigenvectors to partition */
-        public const bool MAKE_CONNECTED = false; /* connect graph for spectral method? */
+        /// <summary>invoke terminal propagation?</summary>
+        public const bool TERM_PROP = false;
 
-        public const bool COARSEN_VWGTS = false; /* use vertex weights while coarsening? */
-        public const bool COARSEN_EWGTS = false; /* use edge weights while coarsening? */
-        public const bool HEAVY_MATCH = false; /* choose heavy edges in matching? */
-        public const double COARSEN_RATIO_MIN = 0.0d; /* min vtx reduction for coarsening */
-        public const double PERTURB_MAX = 0.0d; /* maximum perturbation */
-        public const int MAXDIMS = 3; /**< Most cuts allowed at one time */
-        public const int MAXSETS = 8; /**< 2^MAXDIMS */
-        public const int NPERTURB = 0; /* number of edges to perturb */
-        public const int COARSE_NLEVEL_RQI = 0; /* do RQI this often in uncoarsening */
+        /// <summary>simulate the communication?</summary>
+        public const int SIMULATOR = 0;
+        /// <summary>simulator iterations</summary>
+        public const int SIMULATION_ITNS = 0;
+        /// <summary>..if so, importance of cuts/hops</summary>
+        public const double CUT_TO_HOP_COST = 0.0d;
+        /// <summary>cost of each cut</summary>
+        public const double CUT_COST = 0.0d;
+        /// <summary>cost of each hop</summary>
+        public const double HOP_COST = 0.0d;
+        /// <summary>cost of each boundary vertex</summary>
+        public const double BDY_COST = 0.0d;
+        /// <summary>cost of each boundary vertex hop</summary>
+        public const double BDY_HOP_COST = 0.0d;
+        /// <summary>initiation cost of each message</summary>
+        public const double STARTUP_COST = 0.0d;
 
-        public const bool TERM_PROP = false; /* invoke terminal propagation? */
+        /// <summary>user type</summary>
+        public const bool EXPERT = false;
+        /// <summary>Debug flag for connected components</summary>
+        public const bool DEBUG_CONNECTED = false;
+        /// <summary>debug code about force_internal?</summary>
+        public const bool DEBUG_INTERNAL = false;
+        /// <summary>debug code about refine_part?</summary>
+        public const bool DEBUG_REFINE_PART = false;
+        /// <summary>debug code about refine_map?</summary>
+        public const bool DEBUG_REFINE_MAP = false;
+        /// <summary>print out computed machine params?</summary>
+        public const bool DEBUG_MACH_PARAMS = false;
+        /// <summary>turn on debugging in assignment</summary>
+        public const bool DEBUG_ASSIGN = false;
+        /// <summary>Debug flag for inertial method</summary>
+        public const bool DEBUG_INERTIAL = false;
+        /// <summary>trace the execution of the code</summary>
+        public const bool DEBUG_TRACE = true;
+        /// <summary>Debug output in min vtx cover routines?</summary>
+        public const int DEBUG_COVER = 0;
+        /// <summary>debug flag for eigenvector generation</summary>
+        public const int DEBUG_EVECS = 2;
+        /// <summary>print warning messages? 0 to 5, increasing amount of info</summary>
+        public const int WARNING_EVECS = 5;
+        /// <summary>debug flag for optimization</summary>
+        public const bool DEBUG_OPTIMIZE = false;
+        /// <summary>turn on debugging for bipartite matching</summary>
+        public const DebugFlagBP DEBUG_BPMATCH = DebugFlagBP.ErrorChecking;
+        /// <summary>debug flag for matrix perturbation</summary>
+        public const bool DEBUG_PERTURB = false;
+        /// <summary>debug flag for coarsening</summary>
+        public const bool DEBUG_COARSEN = false;
+        /// <summary>OUTPUT METRICS</summary>
+        public const bool PRINT_GRAPH_PARTITION_METRICS = false;
+        /// <summary>OUTPUT METRICS negative</summary>
+        public const bool PRINT_GRAPH_PARTITION_METRICS_ALL_RECURSION_LEVELS = false;
+        /// <summary>OUTPUT METRICS false = 1, true = 2</summary>
+        public const bool PRINT_GRAPH_PARTITION_METRICS_DETAILED = false;
+        /// <summary>print section headings for output?</summary>
+        public const bool PRINT_HEADERS = true;
+        /// <summary>ECHO: case != 0</summary>
+        public const bool ECHO_USER_PARAMETERS = false;
+        /// <summary>ECHO: case 2 or -2</summary>
+        public const bool ECHO_INPUT_PARAMETERS = false;
+        /// <summary>should I check input for correctness?</summary>
+        public const bool CHECK_INPUT = true;
 
+        /// <summary>Debug flag for Kernighan-Lin</summary>
+        public const DebugFlagKL DEBUG_KL = DebugFlagKL.ImprovementsPerStep;
 
-        public const int SIMULATOR = 0; /* simulate the communication? */
-        public const int SIMULATION_ITNS = 0; /* simulator iterations */
-        public const double CUT_TO_HOP_COST = 0.0d; /* ..if so, importance of cuts/hops */
-        public const double CUT_COST = 0.0d; /* cost of each cut */
-        public const double HOP_COST = 0.0d; /* cost of each hop */
-        public const double BDY_COST = 0.0d; /* cost of each boundary vertex */
-        public const double BDY_HOP_COST = 0.0d; /* cost of each boundary vertex hop */
-        public const double STARTUP_COST = 0.0d; /* initiation cost of each message */
-
-        public const bool EXPERT = false; /* user type */
-        public const bool DEBUG_CONNECTED = false; /* Debug flag for connected components */
-        public const bool DEBUG_INTERNAL = false; /* debug code about force_internal? */
-        public const bool DEBUG_REFINE_PART = false; /* debug code about refine_part? */
-        public const bool DEBUG_REFINE_MAP = false; /* debug code about refine_map? */
-        public const bool DEBUG_MACH_PARAMS = false; /* print out computed machine params? */
-        public const bool DEBUG_ASSIGN = false; /* turn on debugging in assignment */
-        public const bool DEBUG_INERTIAL = false; /* Debug flag for inertial method */
-        public const bool DEBUG_TRACE = true; /* trace the execution of the code */
-        public const int DEBUG_COVER = 0; /* Debug output in min vtx cover routines? */
-        public const int DEBUG_EVECS = 2; /* debug flag for eigenvector generation */
-        public const int WARNING_EVECS = 5; /* print warning messages? 0 to 5, increasing amount of info */
-        public const bool DEBUG_OPTIMIZE = false; /* debug flag for optimization */
-        public const DebugFlagBP DEBUG_BPMATCH = DebugFlagBP.ErrorChecking; /* turn on debugging for bipartite matching */
-        public const bool DEBUG_PERTURB = false; /* debug flag for matrix perturbation */
-        public const bool DEBUG_COARSEN = false; /* debug flag for coarsening */
-        public const bool FullTrace = true;
-        public const bool PRINT_GRAPH_PARTITION_METRICS = false; // OUTPUT METRICS
-        public const bool PRINT_GRAPH_PARTITION_METRICS_ALL_RECURSION_LEVELS = false; // OUTPUT METRICS negative
-        public const bool PRINT_GRAPH_PARTITION_METRICS_DETAILED = false; // OUTPUT METRICS false = 1, true = 2
-        public const bool PRINT_HEADERS = true; /* print section headings for output? */
-        public const bool ECHO_USER_PARAMETERS = false; // ECHO: case != 0
-        public const bool ECHO_INPUT_PARAMETERS = false; // ECHO: case 2 or -2
-        public const bool CHECK_INPUT = true; /* should I check input for correctness? */
-
-        public const DebugFlagKL DEBUG_KL = DebugFlagKL.ImprovementsPerStep; /* Debug flag for Kernighan-Lin */
-
-
-
-
-        public const bool LANCZOS_TIME = false; /* perform detailed timing on Lanczos_SO? */
-        public const bool TIME_KERNELS = false; /* benchmark some numerical kernels? */
+        /// <summary>perform detailed timing on Lanczos_SO?</summary>
+        public const bool LANCZOS_TIME = false;
+        /// <summary>benchmark some numerical kernels?</summary>
+        public const bool TIME_KERNELS = false;
+        // TODO:
+        /// <summary></summary>
         public const int OUTPUT_TIME = 0;
 
+        // TODO:
+        /// <summary></summary>
         public static double splarax_time; /* time matvecs */
         public static double orthog_time; /* time orthogonalization work */
         public static double tevec_time; /* time tridiagonal eigvec work */
@@ -181,15 +259,19 @@ namespace ChacoSharp
         public static double median_time; /* time to find medians */
         public static double inertial_time; /* time spend in inertial calculations */
 
-        /// <summary>
-        /// Machine Precision.
-        /// </summary>
+        /// <summary>Machine Precision.</summary>
         /// <remarks>
         /// The value of the Epsilon property is not equivalent to machine epsilon,
         /// which represents the upper bound of the relative error due to rounding in floating-point arithmetic.
         /// </remarks>
+        /// <see ref="https://docs.microsoft.com/en-us/dotnet/api/system.double.epsilon?view=netcore-3.0"/>
         public static readonly double DOUBLE_EPSILON = CalculateMachineEpsilon();
 
+        /// <summary>
+        /// Calculates the value of Machine Epsilon at the time of execution.
+        /// </summary>
+        /// <returns>The value of Machine Epsilon value; The upper bound of the relative error due to rounding in floating-point arithmetic.</returns>
+        /// <see ref="https://stackoverflow.com/a/9393079/103959"/>
         private static double CalculateMachineEpsilon()
         {
             var eps = 1.0d / 16.0d;
@@ -259,3 +341,4 @@ namespace ChacoSharp
 }
 #pragma warning restore S1104 // Fields should not have public accessibility
 #pragma warning restore S2223 // Non-constant static fields should not be visible
+#pragma warning restore RCS1057 // Add empty line between declarations.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using static ChacoSharp.Utilities.Dot;
 
 namespace ChacoSharp.Utilities
@@ -12,16 +13,16 @@ namespace ChacoSharp.Utilities
         {
             int i;
 
-            Console.WriteLine(tag);
+            Trace.WriteLine(tag);
             for (i = beg; i <= end; i++)
             {
                 if (Math.Abs(vec[i]) >= 1.0e-16)
                 {
-                    Console.WriteLine("{0:d}.   {1:f}", i, vec[i]);
+                    Trace.WriteLine($"{i:d}.   {vec[i]:f}");
                 }
                 else
                 {
-                    Console.WriteLine("{0:d}.         {1:g}", i, vec[i]);
+                    Trace.WriteLine($"{i:d}.         {vec[i]:g}");
                 }
             }
         }

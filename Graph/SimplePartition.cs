@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.Randomize;
@@ -46,7 +47,7 @@ namespace ChacoSharp.Graph
             var weights = new int[MAXSETS]; /* weight assigned to given set so far */
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("Generating scattered partition, nvtxs = {0:d}", nvtxs);
+                Trace.WriteLine($"Generating scattered partition, nvtxs = {nvtxs:d}");
             }
 
             for (var j = 0; j < nsets; j++)
@@ -86,7 +87,7 @@ namespace ChacoSharp.Graph
         {
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("Generating linear partition, nvtxs = {0:d}", nvtxs);
+                Trace.WriteLine($"Generating linear partition, nvtxs = {nvtxs:d}");
             }
 
             var weight = 0.0d;
@@ -120,7 +121,7 @@ namespace ChacoSharp.Graph
         {
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("Generating random partition, nvtxs = {0:d}", nvtxs);
+                Trace.WriteLine($"Generating random partition, nvtxs = {nvtxs:d}");
             }
 
             /* Construct random order in which to step through graph. */

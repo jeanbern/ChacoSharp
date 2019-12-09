@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Utilities.MergeSort;
 using static ChacoSharp.Graph.FindMaxDeg;

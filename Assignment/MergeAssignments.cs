@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ChacoSharp.Assignment
+﻿namespace ChacoSharp.Assignment
 {
     public static unsafe class MergeAssignments
     {

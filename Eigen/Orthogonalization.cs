@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Utilities.Scadd;
 using static ChacoSharp.Utilities.Dot;
@@ -26,26 +27,26 @@ namespace ChacoSharp.Eigen
             /* Check orthogonality over whole set. */
             if (option == 1)
             {
-                Console.WriteLine("Orthogonality check:");
+                Trace.WriteLine("Orthogonality check:");
                 for (i = 1; i <= dim; i++)
                 {
-                    Console.Write("{0:d})", i);
+                    Trace.Write($"{i:d})");
                     for (j = 1; j <= i; j++)
                     {
                         prod = dot(mat[i], 1, n, mat[j]);
                         /* printf(" %g ",prod); */
                         /* printf(" %4.2e ",prod); */
                         /* printf(" %4.2e ",fabs(prod)); */
-                        Console.Write(" {0:d}", -(int) Math.Log10(prod));
+                        Trace.Write($" {-(int) Math.Log10(prod):d}");
                     }
 
-                    Console.WriteLine();
+                    Trace.WriteLine("");
                 }
             }
 
             if (option == 2)
             {
-                Console.Write("Frobenius orthogonality measure:");
+                Trace.Write("Frobenius orthogonality measure:");
                 measure = 0;
                 for (i = 1; i <= dim; i++)
                 {
@@ -63,7 +64,7 @@ namespace ChacoSharp.Eigen
                     }
                 }
 
-                Console.WriteLine("{0:g} ", measure);
+                Trace.WriteLine($"{measure:g} ");
             }
 
             /* Check orthogonality against last vector. Allows you to build up orthogonality
@@ -71,7 +72,7 @@ namespace ChacoSharp.Eigen
                but may interact with other debug output to give a confusing presentation. */
             if (option == 3)
             {
-                Console.Write("{0:d}) ", dim);
+                Trace.Write($"{dim:d}) ");
                 lim = Math.Min(dim, screenlim);
                 worst = 0;
                 for (i = 1; i <= dim; i++)
@@ -79,7 +80,7 @@ namespace ChacoSharp.Eigen
                     prod = dot(mat[i], 1, n, mat[dim]);
                     if (i <= lim)
                     {
-                        Console.Write(" {0:d}", -(int) Math.Log10(Math.Abs(prod)));
+                        Trace.Write($" {-(int) Math.Log10(Math.Abs(prod)):d}");
                     }
 
                     if ((i != dim) && (Math.Abs(prod) > Math.Abs(worst)))
@@ -88,7 +89,7 @@ namespace ChacoSharp.Eigen
                     }
                 }
 
-                Console.WriteLine(" worst {0:e}", worst);
+                Trace.WriteLine($" worst {worst:e}");
             }
         }
 
@@ -111,26 +112,26 @@ namespace ChacoSharp.Eigen
             /* Check orthogonality over whole set. */
             if (option == 1)
             {
-                Console.WriteLine("Orthogonality check:");
+                Trace.WriteLine("Orthogonality check:");
                 for (i = 1; i <= dim; i++)
                 {
-                    Console.Write("{0:d})", i);
+                    Trace.Write($"{i:d})");
                     for (j = 1; j <= i; j++)
                     {
                         prod = dot_float(mat[i], 1, n, mat[j]);
                         /* printf(" %g ",prod); */
                         /* printf(" %4.2e ",prod); */
                         /* printf(" %4.2e ",fabs(prod)); */
-                        Console.Write(" {0:d}", -(int) Math.Log10(prod));
+                        Trace.Write($" {-(int) Math.Log10(prod):d}");
                     }
 
-                    Console.WriteLine();
+                    Trace.WriteLine("");
                 }
             }
 
             if (option == 2)
             {
-                Console.Write("Frobenius orthogonality measure:");
+                Trace.Write("Frobenius orthogonality measure:");
                 measure = 0;
                 for (i = 1; i <= dim; i++)
                 {
@@ -148,7 +149,7 @@ namespace ChacoSharp.Eigen
                     }
                 }
 
-                Console.WriteLine("{0:g} ", measure);
+                Trace.WriteLine($"{measure:g} ");
             }
 
             /* Check orthogonality against last vector. Allows you to build up orthogonality
@@ -156,7 +157,7 @@ namespace ChacoSharp.Eigen
                but may interact with other debug output to give a confusing presentation. */
             if (option == 3)
             {
-                Console.Write("{0:d}) ", dim);
+                Trace.Write($"{dim:d}) ");
                 lim = Math.Min(dim, screenlim);
                 worst = 0;
                 for (i = 1; i <= dim; i++)
@@ -164,7 +165,7 @@ namespace ChacoSharp.Eigen
                     prod = dot_float(mat[i], 1, n, mat[dim]);
                     if (i <= lim)
                     {
-                        Console.Write(" {0:d}", -(int) Math.Log10(Math.Abs(prod)));
+                        Trace.Write($" {-(int) Math.Log10(Math.Abs(prod)):d}");
                     }
 
                     if ((i != dim) && (Math.Abs(prod) > Math.Abs(worst)))
@@ -173,7 +174,7 @@ namespace ChacoSharp.Eigen
                     }
                 }
 
-                Console.WriteLine(" worst {0:e}", worst);
+                Trace.WriteLine($" worst {worst:e}");
             }
         }
 

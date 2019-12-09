@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static ChacoSharp.Assignment.AssignFunc;
 using static ChacoSharp.StaticConstants;
@@ -70,7 +71,7 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering rqi>");
+                Trace.WriteLine("<Entering rqi>");
             }
 
             /* Initialize RQI loop */
@@ -93,16 +94,16 @@ namespace ChacoSharp.Eigen
 
             if (DEBUG_EVECS > 0)
             {
-                Console.WriteLine("Using RQI/Symmlq refinement on graph with {0:D} vertices.", n);
+                Trace.WriteLine($"Using RQI/Symmlq refinement on graph with {n:D} vertices.");
             }
 
             if (DEBUG_EVECS > 1)
             {
-                Console.WriteLine("  step      lambda est.            Ares          Symmlq its.   istop  factor  delta");
-                Console.Write("    0");
+                Trace.WriteLine("  step      lambda est.            Ares          Symmlq its.   istop  factor  delta");
+                Trace.Write("    0");
                 doubleout(shift, 1);
                 doubleout(res, 1);
-                Console.WriteLine();
+                Trace.WriteLine("");
             }
 
             if (RQI_CONVERGENCE_MODE == 1)
@@ -212,19 +213,19 @@ namespace ChacoSharp.Eigen
 
                 if (DEBUG_EVECS > 1)
                 {
-                    Console.Write("   {0:d}", rqisteps);
+                    Trace.Write($"   {rqisteps:d}");
                     doubleout(shift, 1);
                     doubleout(res, 1);
-                    Console.Write("     {0:d}", itn);
-                    Console.Write("          {0:d}", istop);
-                    Console.Write("      {0:g}", factor);
+                    Trace.Write($"     {itn:d}");
+                    Trace.Write($"          {istop:d}");
+                    Trace.Write($"      {factor:g}");
                     if (RQI_CONVERGENCE_MODE == 1)
                     {
-                        Console.WriteLine("     {0:d}", assigndiff);
+                        Trace.WriteLine($"     {assigndiff:d}");
                     }
                     else
                     {
-                        Console.WriteLine();
+                        Trace.WriteLine("");
                     }
                 }
             }
@@ -233,14 +234,14 @@ namespace ChacoSharp.Eigen
 
             if (WARNING_EVECS > 0 && warning)
             {
-                Console.WriteLine("WARNING: Residual convergence not monotonic; RQI may have misconverged.");
+                Trace.WriteLine("WARNING: Residual convergence not monotonic; RQI may have misconverged.");
             }
 
             if (DEBUG_EVECS > 0)
             {
-                Console.Write("Eval ");
+                Trace.Write("Eval ");
                 doubleout(*evalest, 1);
-                Console.WriteLine("   RQI steps {0:d},  Symmlq iterations {1:d}.\n", rqisteps, symmlqitns);
+                Trace.WriteLine($"   RQI steps {rqisteps:d},  Symmlq iterations {symmlqitns:d}.\n");
             }
 
             if (RQI_CONVERGENCE_MODE == 1)

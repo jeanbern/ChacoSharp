@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -197,7 +198,7 @@ namespace ChacoSharp.Coarsening
                     neighbor = indices[j];
                     if (neighbor < n_left || neighbor >= n_left + n_right)
                     {
-                        Console.WriteLine("Bad edge ({0:d}, {1:d})", i, neighbor);
+                        Trace.WriteLine($"Bad edge ({i:d}, {neighbor:d})");
                     }
 
                     /* Check for counter-edge */
@@ -211,7 +212,7 @@ namespace ChacoSharp.Coarsening
 
                     if (k == pointers[neighbor + 1])
                     {
-                        Console.WriteLine("Flip edge ({0:d}, {1:d}) not found", k, i);
+                        Trace.WriteLine($"Flip edge ({k:d}, {i:d}) not found");
                     }
                 }
             }
@@ -223,7 +224,7 @@ namespace ChacoSharp.Coarsening
                     neighbor = indices[j];
                     if (neighbor < 0 || neighbor >= n_left)
                     {
-                        Console.WriteLine("Bad edge ({0:d}, {1:d})", i, neighbor);
+                        Trace.WriteLine($"Bad edge ({i:d}, {neighbor:d})");
                     }
 
                     /* Check for counter-edge */
@@ -237,7 +238,7 @@ namespace ChacoSharp.Coarsening
 
                     if (k == pointers[neighbor + 1])
                     {
-                        Console.WriteLine("Flip edge ({0:d}, {1:d}) not found", k, i);
+                        Console.WriteLine($"Flip edge ({k:d}, {i:d}) not found");
                     }
                 }
             }

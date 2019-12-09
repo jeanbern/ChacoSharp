@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 using static ChacoSharp.Eigen.Splarax;
 using static ChacoSharp.Utilities.Scadd;
 using static ChacoSharp.Utilities.Norm;
@@ -40,13 +40,13 @@ namespace ChacoSharp.Eigen
             if (DEBUG_EVECS > 0)
             {
                 {
-                    Console.WriteLine("  extended residual: {0:g}", resid);
+                    Trace.WriteLine($"  extended residual: {resid:g}");
                 }
             }
 
             if (warnings && WARNING_EVECS > 0 && resid > eigtol)
             {
-                Console.WriteLine("WARNING: Extended residual ({0:g}) greater than tolerance ({1:g}).", resid, eigtol);
+                Trace.WriteLine($"WARNING: Extended residual ({resid:g}) greater than tolerance ({eigtol:g}).");
             }
 
             return (resid);

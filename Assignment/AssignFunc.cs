@@ -1,6 +1,7 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable HAA0101 // Array allocation for params parameter
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Assignment.Y2X;
 using static ChacoSharp.Assignment.Mapper;
@@ -37,7 +38,7 @@ namespace ChacoSharp.Assignment
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering assign, nvtxs = {0:D}, ndims = {1:D}>", nvtxs, ndims);
+                Trace.WriteLine($"<Entering {nameof(Assign)}, {nameof(nvtxs)} = {nvtxs:D}, {nameof(ndims)} = {ndims:D}>");
             }
 
             var useVertexWeights = vertexWeightMax != 1;
@@ -59,7 +60,7 @@ namespace ChacoSharp.Assignment
                     if (DEBUG_ASSIGN)
                     {
                         var temp = tri_prod(yvecs[1], yvecs[2], yvecs[3], wsqrt, nvtxs);
-                        Console.WriteLine("Before rotation, 3-way orthogonality = {0:e}", temp);
+                        Trace.WriteLine($"Before rotation, 3-way orthogonality = {temp:e}");
                     }
 
                     double phi, gamma, theta; /* angles for optimal rotation */
@@ -69,7 +70,7 @@ namespace ChacoSharp.Assignment
                     if (DEBUG_ASSIGN)
                     {
                         var temp = tri_prod(yvecs[1], yvecs[2], yvecs[3], wsqrt, nvtxs);
-                        Console.WriteLine("After rotation ({0:f},{1:f},{2:f}), 3-way orthogonality = {3:e}", theta, phi, gamma, temp);
+                        Trace.WriteLine($"After rotation ({theta:f},{phi:f},{gamma:f}), 3-way orthogonality = {temp:e}");
                     }
 
                     break;

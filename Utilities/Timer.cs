@@ -1,5 +1,6 @@
 ﻿#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 using System;
+using System.Diagnostics;
 using static ChacoSharp.StaticConstants;
 using static ChacoSharp.Utilities.MkVec;
 using static ChacoSharp.Utilities.Dot;
@@ -36,7 +37,7 @@ namespace ChacoSharp.Utilities
 
             if (DEBUG_TRACE)
             {
-                Console.WriteLine("<Entering time_kernels>");
+                Trace.WriteLine("<Entering time_kernels>");
             }
 
             const int beg = 1;
@@ -99,11 +100,11 @@ namespace ChacoSharp.Utilities
                 loops = 1;
             }
 
-            Console.WriteLine("                Kernel benchmarking");
-            Console.WriteLine("Time (in seconds) for {0:d} loops of each operation:\n", loops);
+            Trace.WriteLine("                Kernel benchmarking");
+            Trace.WriteLine($"Time (in seconds) for {loops:d} loops of each operation:\n");
 
-            Console.WriteLine("Routine      Double     Float      Discrepancy      Description");
-            Console.WriteLine("-------      ------     -----      -----------      -----------");
+            Trace.WriteLine("Routine      Double     Float      Discrepancy      Description");
+            Trace.WriteLine("-------      ------     -----      -----------      -----------");
 
             /* Norm operation */
             time = seconds();
@@ -124,8 +125,8 @@ namespace ChacoSharp.Utilities
             var timeSvec = seconds() - time;
 
             var diff = normDvec - normSvec;
-            Console.Write("norm        {0:f}    {1:f}    {2:e}", timeDvec, timeSvec, diff);
-            Console.WriteLine("      2 norm");
+            Trace.Write($"norm        {timeDvec:f}    {timeSvec:f}    {diff:e}");
+            Trace.WriteLine("      2 norm");
 
             /* Dot operation */
             time = seconds();
@@ -147,8 +148,8 @@ namespace ChacoSharp.Utilities
             timeSvec = seconds() - time;
 
             diff = dotDvec - dotSvec;
-            Console.Write("dot         {0:f}    {1:f}    {2:e}", timeDvec, timeSvec, diff);
-            Console.WriteLine("      scalar product");
+            Trace.Write($"dot         {timeDvec:f}    {timeSvec:f}    {diff:e}");
+            Trace.WriteLine("      scalar product");
 
             /* Scadd operation */
             const double factor = 1.01d;
@@ -175,8 +176,8 @@ namespace ChacoSharp.Utilities
             timeSvec = seconds() - time;
 
             diff = checkvec(dvec1, beg, end, svec1);
-            Console.Write("scadd       {0:f}    {1:f}    {2:e}", timeDvec, timeSvec, diff);
-            Console.WriteLine("      vec1 <- vec1 + alpha*vec2");
+            Trace.Write($"scadd       {timeDvec:f}    {timeSvec:f}    {diff:e}");
+            Trace.WriteLine("      vec1 <- vec1 + alpha*vec2");
 
             /* Update operation */
             time = seconds();
@@ -196,8 +197,8 @@ namespace ChacoSharp.Utilities
             timeSvec = seconds() - time;
 
             diff = checkvec(dvec1, beg, end, svec1);
-            Console.Write("update      {0:f}    {1:f}    {2:g}", timeDvec, timeSvec, diff);
-            Console.WriteLine("      vec1 <- vec2 + alpha*vec3");
+            Trace.Write($"update      {timeDvec:f}    {timeSvec:f}    {diff:g}");
+            Trace.WriteLine("      vec1 <- vec2 + alpha*vec3");
 
             /* splarax operation */
             if (PERTURB)
@@ -207,12 +208,12 @@ namespace ChacoSharp.Utilities
                     perturb_init(n);
                     if (DEBUG_PERTURB)
                     {
-                        Console.WriteLine("Matrix being perturbed with scale {0:e}", PERTURB_MAX);
+                        Trace.WriteLine($"Matrix being perturbed with scale {PERTURB_MAX:e}");
                     }
                 }
                 else if (DEBUG_PERTURB)
                 {
-                    Console.WriteLine("Matrix not being perturbed");
+                    Trace.WriteLine("Matrix not being perturbed");
                 }
             }
 
@@ -233,15 +234,15 @@ namespace ChacoSharp.Utilities
             timeSvec = seconds() - time;
 
             diff = checkvec(dvec1, beg, end, svec1);
-            Console.Write("splarax     {0:f}    {1:f}    {2:e}", timeDvec, timeSvec, diff);
-            Console.WriteLine("      sparse matrix vector multiply");
+            Trace.Write($"splarax     {timeDvec:f}    {timeSvec:f}    {diff:e}");
+            Trace.WriteLine("      sparse matrix vector multiply");
 
             if (PERTURB && NPERTURB > 0 && PERTURB_MAX > 0.0)
             {
                 perturb_clear();
             }
 
-            Console.WriteLine();
+            Trace.WriteLine("");
 
             /* Free memory */
             frvec(dvec1, 1);
