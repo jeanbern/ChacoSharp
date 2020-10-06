@@ -867,7 +867,6 @@ namespace ChacoSharp.SubMain
             double total_bdyvtxs; /* sum of all onbdy values in whole graph  */
             int total_neighbors; /* number of neighboring sets in graph */
             int neighbor; /* neighbor of a vertex */
-            int print2file; /* should I print to a file? */
             int x1, y1, z1; /* mesh location of vertex */
             int x2, y2, z2; /* mesh location of neighboring vertex */
             int i, j; /* loop counters */
